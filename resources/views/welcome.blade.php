@@ -24,7 +24,7 @@
                     <img class="h-12 md:h-14 w-auto object-contain" src="{{ asset('BATAM EDU-GOV AI W RBG.png') }}" alt="Logo">
                 </div>
                 <!-- Nav Links -->
-                <div class="hidden md:flex space-x-2 items-center bg-gray-900 p-1 rounded-full border border-gray-800">
+                <div class="hidden md:flex space-x-2 items-center bg-neutral-900 p-1 rounded-full border border-neutral-800">
                     <a href="#" class="bg-[#166534] text-white px-5 py-2 rounded-full text-sm font-semibold shadow-sm">Beranda/Publik</a>
                     <a href="#" class="text-gray-300 hover:text-white px-5 py-2 rounded-full text-sm font-medium transition-colors">Alur & Persyaratan</a>
                     <a href="#" class="text-gray-300 hover:text-white px-5 py-2 rounded-full text-sm font-medium transition-colors">Lacak Berkas</a>
