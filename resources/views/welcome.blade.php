@@ -11,6 +11,14 @@
     @vite('resources/css/app.css')
     <style>
         body { font-family: 'Inter', sans-serif; }
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            50% { transform: translateY(300%); }
+            100% { transform: translateY(-100%); }
+        }
+        .animate-scan {
+            animation: scan 3s ease-in-out infinite;
+        }
     </style>
 </head>
 <body class="bg-[#F8F9FA] text-gray-800 antialiased selection:bg-green-200">
@@ -57,7 +65,6 @@
                 <!-- Hero Content -->
                 <div>
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-100 border border-gray-200 text-xs font-semibold text-gray-600 mb-6 tracking-wide">
-                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
                         SISTEM VERIFIKASI BERKAS TERINTEGRASI
                     </div>
                     <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight mb-6 tracking-tight">
@@ -69,56 +76,101 @@
                     <div class="flex flex-col sm:flex-row gap-4 mb-8">
                         <a href="#" class="inline-flex justify-center items-center px-8 py-3.5 border border-transparent text-base font-semibold rounded-lg shadow-sm text-white bg-[#166534] hover:bg-green-800 transition-colors">
                             Ajukan Bantuan Sekarang
-                            <svg class="ml-2 -mr-1 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                         </a>
                         <a href="#" class="inline-flex justify-center items-center px-8 py-3.5 border border-gray-300 text-base font-semibold rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition-colors shadow-sm">
-                            <svg class="mr-2 -ml-1 w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                             Cek Status Pengajuan
                         </a>
                     </div>
                     <div class="flex items-center gap-2 text-sm text-gray-500 font-medium bg-green-50/50 p-3 rounded-lg border border-green-100 inline-flex">
-                        <svg class="w-5 h-5 text-[#166534]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
                         Terintegrasi Sistem Single Identity Disdukcapil & PDDIKTI Kemendikbudristek
                     </div>
                 </div>
                 
-                <!-- Hero Image Area (Mockup/Dashboard preview) -->
-                <div class="relative w-full h-[500px] bg-gray-50 rounded-2xl border border-gray-200 shadow-xl overflow-hidden flex flex-col p-2">
-                    <div class="bg-white border border-gray-200 rounded-xl flex-1 overflow-hidden relative shadow-sm">
-                         <!-- Toolbar -->
-                         <div class="h-12 border-b border-gray-100 flex items-center justify-between px-4 bg-gray-50/50">
-                              <div class="text-sm font-semibold text-gray-700 flex items-center gap-2">
-                                   <svg class="w-4 h-4 text-[#166534]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                   Validasi Dokumen Resmi
-                              </div>
-                              <span class="text-[10px] font-bold bg-gray-200 text-gray-600 px-2 py-1 rounded">SOP 2024</span>
-                         </div>
-                         <!-- Content area (simulating dashboard UI) -->
-                         <div class="p-4 grid grid-cols-2 gap-4 h-full bg-gray-50">
-                             <div class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden h-40">
-                                 <div class="h-full bg-gray-200 animate-pulse"></div>
-                             </div>
-                             <div class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden h-40">
-                                 <div class="h-full bg-gray-200 animate-pulse"></div>
-                             </div>
-                             
-                             <div class="col-span-2 absolute bottom-4 left-4 right-4">
-                                 <div class="bg-white rounded-xl shadow-lg border border-gray-100 p-4 flex gap-4 backdrop-blur-sm bg-white/90">
-                                     <div class="flex-1">
-                                        <p class="text-xs text-gray-500 font-medium">Waktu Proses AI</p>
-                                        <p class="text-lg font-bold text-gray-900">< 2 Detik</p>
-                                        <p class="text-xs text-green-600 font-medium">Pemeriksaan Kelengkapan</p>
-                                     </div>
-                                     <div class="w-px bg-gray-200"></div>
-                                     <div class="flex-1">
-                                        <p class="text-xs text-gray-500 font-medium">Aparatur Verifikator</p>
-                                        <p class="text-lg font-bold text-gray-900">48 Personel</p>
-                                        <p class="text-xs text-blue-600 font-medium">Disdik & Inspektorat Daerah</p>
-                                     </div>
-                                 </div>
-                             </div>
-                         </div>
+                <!-- Hero Image Area (Carousel) -->
+                <div class="relative w-full h-[400px] md:h-[500px] rounded-2xl shadow-2xl overflow-hidden group" id="heroCarouselWrapper">
+                    <!-- Slides -->
+                    <div class="relative w-full h-full">
+
+                        <!-- Slide 1 -->
+                        <div class="hero-slide absolute inset-0 transition-opacity duration-700 opacity-100">
+                            <img src="{{ asset('SMA.jpg') }}" alt="Siswa Bahagia" class="w-full h-full object-cover" style="object-position: center 20%; transform: scale(1.05);">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                            <div class="absolute bottom-8 left-8 right-8 text-white">
+                                <span class="bg-[#166534] px-3 py-1 rounded text-xs font-bold mb-3 inline-block shadow-sm">Jalur SNBP</span>
+                                <h3 class="text-2xl font-bold mb-2">Wujudkan Cita-cita Generasi Emas Batam</h3>
+                                <p class="text-sm text-gray-200">Mendukung putra-putri daerah meraih pendidikan tinggi yang berkualitas.</p>
+                            </div>
+                        </div>
+
+                        <!-- Slide 2 -->
+                        <div class="hero-slide absolute inset-0 transition-opacity duration-700 opacity-0">
+                            <img src="{{ asset('Wisuda.jpg') }}" alt="Suasana Wisuda" class="w-full h-full object-cover" style="object-position: center 30%; transform: scale(1.05);">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                            <div class="absolute bottom-8 left-8 right-8 text-white">
+                                <span class="bg-[#166534] px-3 py-1 rounded text-xs font-bold mb-3 inline-block shadow-sm">Jalur SNBT</span>
+                                <h3 class="text-2xl font-bold mb-2">Dukungan Penuh Untuk Mahasiswa Aktif</h3>
+                                <p class="text-sm text-gray-200">Alokasi pagu bantuan pendidikan hingga Rp 7.000.000 per semester.</p>
+                            </div>
+                        </div>
+
+                        <!-- Slide 3 -->
+                        <div class="hero-slide absolute inset-0 transition-opacity duration-700 opacity-0">
+                            <img src="{{ asset('Mahasiswa Pace.jpg') }}" alt="Belajar Bersama" class="w-full h-full object-cover" style="object-position: center 25%; transform: scale(1.05);">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                            <div class="absolute bottom-8 left-8 right-8 text-white">
+                                <span class="bg-[#166534] px-3 py-1 rounded text-xs font-bold mb-3 inline-block shadow-sm">Hinterland & Pesisir</span>
+                                <h3 class="text-2xl font-bold mb-2">Pemerataan Pendidikan Hingga ke Pelosok</h3>
+                                <p class="text-sm text-gray-200">Afirmasi khusus bagi masyarakat kepulauan dan pulau penyangga Batam.</p>
+                            </div>
+                        </div>
                     </div>
+
+                    <!-- Navigation Buttons -->
+                    <button onclick="heroCarouselPrev()" class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/30 hover:bg-black/50 backdrop-blur-md text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all cursor-pointer z-10">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    </button>
+                    <button onclick="heroCarouselNext()" class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/30 hover:bg-black/50 backdrop-blur-md text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all cursor-pointer z-10">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+
+                    <!-- Dot Indicators -->
+                    <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10" id="heroDots">
+                        <button onclick="heroCarouselGoTo(0)" class="hero-dot w-2 h-2 rounded-full bg-white transition-all"></button>
+                        <button onclick="heroCarouselGoTo(1)" class="hero-dot w-2 h-2 rounded-full bg-white/40 transition-all"></button>
+                        <button onclick="heroCarouselGoTo(2)" class="hero-dot w-2 h-2 rounded-full bg-white/40 transition-all"></button>
+                    </div>
+
+                    <script>
+                        var _heroIdx = 0;
+                        var _heroSlides = null;
+                        var _heroDots = null;
+                        function _heroInit() {
+                            _heroSlides = document.querySelectorAll('.hero-slide');
+                            _heroDots = document.querySelectorAll('.hero-dot');
+                        }
+                        function heroCarouselGoTo(idx) {
+                            if (!_heroSlides) _heroInit();
+                            _heroSlides[_heroIdx].classList.remove('opacity-100');
+                            _heroSlides[_heroIdx].classList.add('opacity-0');
+                            _heroDots[_heroIdx].classList.remove('bg-white');
+                            _heroDots[_heroIdx].classList.add('bg-white/40');
+                            _heroIdx = idx;
+                            _heroSlides[_heroIdx].classList.remove('opacity-0');
+                            _heroSlides[_heroIdx].classList.add('opacity-100');
+                            _heroDots[_heroIdx].classList.remove('bg-white/40');
+                            _heroDots[_heroIdx].classList.add('bg-white');
+                        }
+                        function heroCarouselNext() {
+                            if (!_heroSlides) _heroInit();
+                            heroCarouselGoTo((_heroIdx + 1) % _heroSlides.length);
+                        }
+                        function heroCarouselPrev() {
+                            if (!_heroSlides) _heroInit();
+                            heroCarouselGoTo((_heroIdx - 1 + _heroSlides.length) % _heroSlides.length);
+                        }
+                        // Auto-play every 5 seconds
+                        setInterval(heroCarouselNext, 5000);
+                    </script>
                 </div>
             </div>
         </div>
@@ -130,7 +182,6 @@
             <div class="p-6">
                 <div class="flex justify-between items-start mb-2">
                     <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Total Alokasi APBD</p>
-                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 </div>
                 <p class="text-2xl font-extrabold text-gray-900 mb-1">Rp 14.8 Miliar</p>
                 <p class="text-xs text-gray-500">Tahun Anggaran Berjalan 2025</p>
@@ -138,7 +189,6 @@
             <div class="p-6">
                 <div class="flex justify-between items-start mb-2">
                     <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Target Penerima</p>
-                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                 </div>
                 <p class="text-2xl font-extrabold text-gray-900 mb-1">3.420 Kuota</p>
                 <p class="text-xs text-gray-500">Mahasiswa D3, D4 & S1 Aktif</p>
@@ -146,7 +196,6 @@
             <div class="p-6">
                 <div class="flex justify-between items-start mb-2">
                     <p class="text-xs font-bold text-gray-500 uppercase tracking-wider">Sebaran Wilayah</p>
-                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 </div>
                 <p class="text-2xl font-extrabold text-gray-900 mb-1">12 Kecamatan</p>
                 <p class="text-xs text-gray-500">Termasuk 3 Kecamatan Kepulauan</p>
@@ -154,7 +203,6 @@
             <div class="p-6">
                 <div class="flex justify-between items-start mb-2">
                     <p class="text-xs font-bold text-green-600 uppercase tracking-wider">Integritas Audit</p>
-                    <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 </div>
                 <p class="text-2xl font-extrabold text-[#166534] mb-1">100% Terbuka</p>
                 <p class="text-xs text-green-700">Akuntabel & Bebas Pungutan</p>
@@ -168,7 +216,6 @@
             <div class="flex justify-between items-center mb-8">
                 <div>
                     <h3 class="text-sm font-bold text-gray-900 flex items-center gap-2">
-                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                         Arsitektur Jalur Pemrosesan Berkas
                     </h3>
                     <p class="text-xs text-gray-500 mt-1">Transparansi setiap tahapan dari input warga hingga terbit SK Walikota</p>
