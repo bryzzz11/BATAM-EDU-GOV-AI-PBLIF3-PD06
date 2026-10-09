@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     @vite('resources/css/app.css')
     <style>
+        html { scroll-behavior: smooth; }
         body { font-family: 'Inter', sans-serif; }
         @keyframes scan {
             0% { transform: translateY(-100%); }
@@ -33,10 +34,10 @@
                 </div>
                 <!-- Nav Links -->
                 <div class="hidden md:flex space-x-2 items-center bg-neutral-900 p-1 rounded-full border border-neutral-800">
-                    <a href="#" class="bg-[#166534] text-white px-5 py-2 rounded-full text-sm font-semibold shadow-sm">Beranda/Publik</a>
-                    <a href="#" class="text-gray-300 hover:text-white px-5 py-2 rounded-full text-sm font-medium transition-colors">Alur & Persyaratan</a>
-                    <a href="#" class="text-gray-300 hover:text-white px-5 py-2 rounded-full text-sm font-medium transition-colors">Lacak Berkas</a>
-                    <a href="#" class="text-gray-300 hover:text-white px-5 py-2 rounded-full text-sm font-medium transition-colors">Pusat Bantuan</a>
+                    <a href="{{ url('/') }}" id="nav-beranda" onclick="setActiveNav('nav-beranda', true)" class="nav-item bg-[#166534] text-white px-5 py-2 rounded-full text-sm font-semibold shadow-sm transition-all">Beranda/Publik</a>
+                    <a href="#section-alur" id="nav-alur" onclick="setActiveNav('nav-alur', true)" class="nav-item text-gray-300 hover:text-white px-5 py-2 rounded-full text-sm font-medium transition-colors">Alur & Persyaratan</a>
+                    <a href="#section-lacak" id="nav-lacak" onclick="setActiveNav('nav-lacak', true)" class="nav-item text-gray-300 hover:text-white px-5 py-2 rounded-full text-sm font-medium transition-colors">Lacak Berkas</a>
+                    <a href="{{ route('bantuan') }}" id="nav-bantuan" class="nav-item text-gray-300 hover:text-white px-5 py-2 rounded-full text-sm font-medium transition-colors">Pusat Bantuan</a>
                 </div>
                 <!-- Right Action Buttons -->
                 <div class="hidden sm:flex items-center gap-4">
@@ -228,31 +229,31 @@
                 <div class="hidden md:block absolute top-6 left-10 right-10 h-0.5 bg-gray-200 z-0"></div>
                 
                 <!-- Step 1 -->
-                <div class="relative z-10 bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+                <div onclick="scrollToAndSelectStep(1)" class="relative z-10 bg-white border border-gray-200 rounded-xl p-4 shadow-sm cursor-pointer hover:border-[#166534] hover:shadow-md transition-all">
                     <div class="w-8 h-8 rounded-full bg-[#166534] text-white flex items-center justify-center text-sm font-bold mb-3 shadow-md">1</div>
                     <h4 class="font-bold text-gray-900 text-sm mb-1">Warga Batam</h4>
                     <p class="text-xs text-gray-500 leading-tight">Validasi NIK e-KTP langsung di database SIAK Disdukcapil.</p>
                 </div>
                 <!-- Step 2 -->
-                <div class="relative z-10 bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+                <div onclick="scrollToAndSelectStep(2)" class="relative z-10 bg-white border border-gray-200 rounded-xl p-4 shadow-sm cursor-pointer hover:border-[#166534] hover:shadow-md transition-all">
                     <div class="w-8 h-8 rounded-full bg-white border border-gray-300 text-gray-700 flex items-center justify-center text-sm font-bold mb-3">2</div>
                     <h4 class="font-bold text-gray-900 text-sm mb-1">Upload Digital</h4>
                     <p class="text-xs text-gray-500 leading-tight">Unggah berkas KTP, KK, Rekening & Surat Keterangan Kampus.</p>
                 </div>
                 <!-- Step 3 -->
-                <div class="relative z-10 bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+                <div onclick="scrollToAndSelectStep(3)" class="relative z-10 bg-white border border-gray-200 rounded-xl p-4 shadow-sm cursor-pointer hover:border-[#166534] hover:shadow-md transition-all">
                     <div class="w-8 h-8 rounded-full bg-white border border-gray-300 text-gray-700 flex items-center justify-center text-sm font-bold mb-3">3</div>
                     <h4 class="font-bold text-gray-900 text-sm mb-1">Verifikasi Sistem</h4>
                     <p class="text-xs text-gray-500 leading-tight">Pencocokan data otomatis, kelengkapan format, & keabsahan berkas.</p>
                 </div>
                 <!-- Step 4 -->
-                <div class="relative z-10 bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+                <div onclick="scrollToAndSelectStep(4)" class="relative z-10 bg-white border border-gray-200 rounded-xl p-4 shadow-sm cursor-pointer hover:border-[#166534] hover:shadow-md transition-all">
                     <div class="w-8 h-8 rounded-full bg-white border border-gray-300 text-gray-700 flex items-center justify-center text-sm font-bold mb-3">4</div>
                     <h4 class="font-bold text-gray-900 text-sm mb-1">Verifikasi Petugas</h4>
                     <p class="text-xs text-gray-500 leading-tight">Audit manual substantif oleh Tim Disdik Kota Batam.</p>
                 </div>
                 <!-- Step 5 -->
-                <div class="relative z-10 bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+                <div onclick="scrollToAndSelectStep(5)" class="relative z-10 bg-white border border-gray-200 rounded-xl p-4 shadow-sm cursor-pointer hover:border-[#166534] hover:shadow-md transition-all">
                     <div class="w-8 h-8 rounded-full bg-white border border-gray-300 text-gray-700 flex items-center justify-center text-sm font-bold mb-3">5</div>
                     <h4 class="font-bold text-gray-900 text-sm mb-1">SK Walikota</h4>
                     <p class="text-xs text-gray-500 leading-tight">Penerbitan SK elektronik penyaluran dana via Bank Riau Kepri Syariah.</p>
@@ -390,68 +391,68 @@
     </div>
 
     <!-- 5 Tahap Alur Pelayanan -->
-    <div class="bg-white border-y border-gray-200 mt-20 pt-16 pb-20">
+    <div id="section-alur" class="bg-white border-y border-gray-200 mt-20 pt-16 pb-20 scroll-mt-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="mb-12">
                 <span class="text-xs font-bold text-gray-500 tracking-wider uppercase">Tata Cara Pendaftaran</span>
                 <h2 class="text-3xl font-bold text-gray-900 mt-2 mb-4">5 Tahap Alur Pelayanan Bantuan Pendidikan</h2>
                 <div class="flex justify-between items-end">
-                    <p class="text-gray-600 max-w-lg">Dari pendaftaran mandiri hingga dana masuk ke rekening aktif mahasiswa secara tepat sasaran.</p>
+                    <p class="text-gray-600 max-w-lg">Dari pendaftaran mandiri hingga dana masuk ke rekening aktif mahasiswa secara tepat sasaran. Klik setiap tahapan untuk melihat informasi detail.</p>
                     <span class="text-xs font-medium text-gray-500 hidden md:flex items-center gap-2"><svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Waktu penyelesaian standar: 7 - 10 hari kerja</span>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
-                <!-- Left: Timeline Steps -->
+                <!-- Left: Timeline Steps Buttons -->
                 <div class="space-y-4">
-                    <!-- Step 1 (Active) -->
-                    <div class="bg-gray-50 border-l-4 border-[#166534] rounded-r-xl p-5 shadow-sm flex items-start gap-4">
-                        <div class="w-8 h-8 rounded-full bg-[#166534] text-white flex shrink-0 items-center justify-center text-sm font-bold shadow-sm mt-1">1</div>
+                    <!-- Step 1 Button -->
+                    <button type="button" onclick="selectStep(1)" id="step-btn-1" class="step-nav-btn w-full text-left bg-gray-50 border-l-4 border-[#166534] rounded-r-xl p-5 shadow-sm flex items-start gap-4 transition-all">
+                        <div id="step-num-1" class="w-8 h-8 rounded-full bg-[#166534] text-white flex shrink-0 items-center justify-center text-sm font-bold shadow-sm mt-1 transition-all">1</div>
                         <div>
-                            <h4 class="font-bold text-gray-900">Registrasi & Verifikasi NIK</h4>
-                            <p class="text-xs text-gray-500 mt-1">Pencocokan data NIK Kependudukan Kota Batam.</p>
+                            <h4 id="step-title-1" class="font-bold text-gray-900 transition-colors">Registrasi & Verifikasi NIK</h4>
+                            <p id="step-desc-1" class="text-xs text-gray-500 mt-1">Pencocokan data NIK Kependudukan Kota Batam.</p>
                         </div>
-                    </div>
-                    <!-- Step 2 -->
-                    <div class="bg-white border border-gray-100 rounded-xl p-5 flex items-start gap-4 hover:bg-gray-50 transition-colors">
-                        <div class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 flex shrink-0 items-center justify-center text-sm font-bold mt-1">2</div>
+                    </button>
+                    <!-- Step 2 Button -->
+                    <button type="button" onclick="selectStep(2)" id="step-btn-2" class="step-nav-btn w-full text-left bg-white border border-gray-100 rounded-xl p-5 flex items-start gap-4 hover:bg-gray-50 transition-all">
+                        <div id="step-num-2" class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 flex shrink-0 items-center justify-center text-sm font-bold mt-1 transition-all">2</div>
                         <div>
-                            <h4 class="font-bold text-gray-600">Unggah Dokumen Digital</h4>
-                            <p class="text-xs text-gray-400 mt-1">KTP, KK, KHS & Rekening Bank.</p>
+                            <h4 id="step-title-2" class="font-bold text-gray-600 transition-colors">Unggah Dokumen Digital</h4>
+                            <p id="step-desc-2" class="text-xs text-gray-400 mt-1">KTP, KK, KHS & Rekening Bank.</p>
                         </div>
-                    </div>
-                    <!-- Step 3 -->
-                    <div class="bg-white border border-gray-100 rounded-xl p-5 flex items-start gap-4 hover:bg-gray-50 transition-colors">
-                        <div class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 flex shrink-0 items-center justify-center text-sm font-bold mt-1">3</div>
+                    </button>
+                    <!-- Step 3 Button -->
+                    <button type="button" onclick="selectStep(3)" id="step-btn-3" class="step-nav-btn w-full text-left bg-white border border-gray-100 rounded-xl p-5 flex items-start gap-4 hover:bg-gray-50 transition-all">
+                        <div id="step-num-3" class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 flex shrink-0 items-center justify-center text-sm font-bold mt-1 transition-all">3</div>
                         <div>
-                            <h4 class="font-bold text-gray-600">Pemeriksaan Sistem Terpadu</h4>
-                            <p class="text-xs text-gray-400 mt-1">Validasi Data Otomatis & Sinkronisasi PDDIKTI.</p>
+                            <h4 id="step-title-3" class="font-bold text-gray-600 transition-colors">Pemeriksaan Sistem Terpadu</h4>
+                            <p id="step-desc-3" class="text-xs text-gray-400 mt-1">Validasi Data Otomatis & Sinkronisasi PDDIKTI.</p>
                         </div>
-                    </div>
-                    <!-- Step 4 -->
-                    <div class="bg-white border border-gray-100 rounded-xl p-5 flex items-start gap-4 hover:bg-gray-50 transition-colors">
-                        <div class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 flex shrink-0 items-center justify-center text-sm font-bold mt-1">4</div>
+                    </button>
+                    <!-- Step 4 Button -->
+                    <button type="button" onclick="selectStep(4)" id="step-btn-4" class="step-nav-btn w-full text-left bg-white border border-gray-100 rounded-xl p-5 flex items-start gap-4 hover:bg-gray-50 transition-all">
+                        <div id="step-num-4" class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 flex shrink-0 items-center justify-center text-sm font-bold mt-1 transition-all">4</div>
                         <div>
-                            <h4 class="font-bold text-gray-600">Pemeriksaan Verifikator Disdik</h4>
-                            <p class="text-xs text-gray-400 mt-1">Pemberian rekomendasi oleh aparatur pemerintah.</p>
+                            <h4 id="step-title-4" class="font-bold text-gray-600 transition-colors">Pemeriksaan Verifikator Disdik</h4>
+                            <p id="step-desc-4" class="text-xs text-gray-400 mt-1">Pemberian rekomendasi oleh aparatur pemerintah.</p>
                         </div>
-                    </div>
-                    <!-- Step 5 -->
-                    <div class="bg-white border border-gray-100 rounded-xl p-5 flex items-start gap-4 hover:bg-gray-50 transition-colors">
-                        <div class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 flex shrink-0 items-center justify-center text-sm font-bold mt-1">5</div>
+                    </button>
+                    <!-- Step 5 Button -->
+                    <button type="button" onclick="selectStep(5)" id="step-btn-5" class="step-nav-btn w-full text-left bg-white border border-gray-100 rounded-xl p-5 flex items-start gap-4 hover:bg-gray-50 transition-all">
+                        <div id="step-num-5" class="w-8 h-8 rounded-full bg-gray-100 text-gray-500 flex shrink-0 items-center justify-center text-sm font-bold mt-1 transition-all">5</div>
                         <div>
-                            <h4 class="font-bold text-gray-600">Penetapan SK Walikota & Penyaluran</h4>
-                            <p class="text-xs text-gray-400 mt-1">Penerbitan SK elektronik & transfer rekening.</p>
+                            <h4 id="step-title-5" class="font-bold text-gray-600 transition-colors">Penetapan SK Walikota & Penyaluran</h4>
+                            <p id="step-desc-5" class="text-xs text-gray-400 mt-1">Penerbitan SK elektronik & transfer rekening.</p>
                         </div>
-                    </div>
+                    </button>
                 </div>
 
-                <!-- Right: Detailed Content for Step 1 -->
+                <!-- Right: Detailed Content Panels -->
                 <div class="lg:col-span-2">
-                    <div class="bg-white rounded-2xl border border-gray-200 shadow-lg p-8 h-full">
+                    <!-- Panel Step 1 -->
+                    <div id="step-panel-1" class="bg-white rounded-2xl border border-gray-200 shadow-lg p-8 h-full">
                         <div class="flex justify-between items-center mb-6">
                             <span class="bg-[#166534] text-white text-xs font-bold px-3 py-1 rounded-md">Tahap Aktif: 1</span>
-                            <span class="text-xs font-semibold text-green-600 flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> Terhubung e-Kependudukan</span>
                         </div>
                         <h3 class="text-2xl font-bold text-gray-900 mb-4">Registrasi Akun Menggunakan NIK e-KTP Batam</h3>
                         <p class="text-gray-600 mb-8 text-sm leading-relaxed">
@@ -465,13 +466,13 @@
                                 <span class="text-[10px] text-green-600 font-bold">Status: Data Valid (Read only)</span>
                             </div>
                             <div class="flex gap-2">
-                                <input type="text" value="2171050809020004 - MUKTI HARKEL" disabled class="flex-1 bg-white border border-gray-300 text-gray-800 text-sm rounded-lg block p-2.5 focus:ring-green-500 focus:border-green-500 font-medium cursor-not-allowed">
-                                <button type="button" disabled class="text-white bg-green-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center shadow-sm opacity-80 cursor-not-allowed">Batam Kota</button>
+                                <input type="text" value="2171050809020004 - MUKTI HARKEL" disabled class="flex-1 bg-white border border-gray-300 text-gray-800 text-sm rounded-lg block p-2.5 font-medium cursor-not-allowed">
+                                <button type="button" disabled class="text-white bg-green-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center shadow-sm opacity-90 cursor-not-allowed">Batam Kota</button>
                             </div>
                             <p class="mt-2 text-xs text-green-600 font-medium flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Terverifikasi aktif berdomisili di Kelurahan Belian, Kec. Batam Kota.</p>
                         </div>
 
-                        <div class="grid grid-cols-2 gap-6 text-sm text-gray-600">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm text-gray-600">
                             <div>
                                 <h5 class="font-bold text-gray-900 mb-2">Dokumen yang Perlu Disiapkan:</h5>
                                 <ul class="space-y-2">
@@ -480,7 +481,7 @@
                                 </ul>
                             </div>
                             <div>
-                                <h5 class="font-bold text-gray-900 mb-2 invisible">Dokumen yang Perlu Disiapkan:</h5>
+                                <h5 class="font-bold text-gray-900 mb-2 invisible sm:visible">Persyaratan Tambahan:</h5>
                                 <ul class="space-y-2">
                                     <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Kartu Keluarga (KK) Resmi</li>
                                     <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Alamat Email Mahasiswa</li>
@@ -490,7 +491,270 @@
                         
                         <div class="mt-8 pt-6 border-t border-gray-100 flex justify-between items-center text-sm">
                             <span class="text-gray-500">Butuh panduan lengkap format berkas?</span>
-                            <a href="#" class="font-bold text-gray-900 hover:text-[#166534] flex items-center gap-1">Pusat Informasi & Bantuan <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></a>
+                            <a href="{{ route('bantuan') }}" class="font-bold text-gray-900 hover:text-[#166534] flex items-center gap-1 transition-colors">Pusat Informasi & Bantuan <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></a>
+                        </div>
+                    </div>
+
+                    <!-- Panel Step 2 -->
+                    <div id="step-panel-2" class="hidden bg-white rounded-2xl border border-gray-200 shadow-lg p-8 h-full">
+                        <div class="flex justify-between items-center mb-6">
+                            <span class="bg-[#166534] text-white text-xs font-bold px-3 py-1 rounded-md">Tahap Aktif: 2</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">Unggah Dokumen Digital Persyaratan Beasiswa</h3>
+                        <p class="text-gray-600 mb-8 text-sm leading-relaxed">
+                            Setelah akun terverifikasi, pemohon mengunggah berkas persyaratan akademik dan administratif dalam format digital (PDF/JPG) dengan batas ukuran maksimal 2 MB per berkas.
+                        </p>
+
+                        <!-- Mockup Files Uploaded -->
+                        <div class="bg-gray-50 rounded-xl p-6 border border-gray-100 mb-8 space-y-3">
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="text-xs font-bold text-gray-500">SIMULASI DOKUMEN DIGITAL TERUNGGAH</label>
+                                <span class="text-[10px] text-green-600 font-bold">4 / 4 Berkas Lengkap</span>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div class="bg-white p-3 rounded-lg border border-gray-200 flex items-center justify-between">
+                                    <div class="flex items-center gap-2.5 overflow-hidden">
+                                        <span class="bg-red-50 text-red-600 p-1.5 rounded text-xs font-bold">PDF</span>
+                                        <div class="truncate text-xs">
+                                            <p class="font-bold text-gray-800 truncate">KTP_dan_KK_Batam.pdf</p>
+                                            <p class="text-gray-400 text-[10px]">1.2 MB • Berhasil Diunggah</p>
+                                        </div>
+                                    </div>
+                                    <span class="text-green-600 font-bold text-xs">✓</span>
+                                </div>
+                                <div class="bg-white p-3 rounded-lg border border-gray-200 flex items-center justify-between">
+                                    <div class="flex items-center gap-2.5 overflow-hidden">
+                                        <span class="bg-red-50 text-red-600 p-1.5 rounded text-xs font-bold">PDF</span>
+                                        <div class="truncate text-xs">
+                                            <p class="font-bold text-gray-800 truncate">Transkrip_KHS_IPK.pdf</p>
+                                            <p class="text-gray-400 text-[10px]">850 KB • IPK 3.82 Terbaca</p>
+                                        </div>
+                                    </div>
+                                    <span class="text-green-600 font-bold text-xs">✓</span>
+                                </div>
+                                <div class="bg-white p-3 rounded-lg border border-gray-200 flex items-center justify-between">
+                                    <div class="flex items-center gap-2.5 overflow-hidden">
+                                        <span class="bg-red-50 text-red-600 p-1.5 rounded text-xs font-bold">PDF</span>
+                                        <div class="truncate text-xs">
+                                            <p class="font-bold text-gray-800 truncate">Surat_Aktif_Kuliah.pdf</p>
+                                            <p class="text-gray-400 text-[10px]">620 KB • Stempel Sah PTN</p>
+                                        </div>
+                                    </div>
+                                    <span class="text-green-600 font-bold text-xs">✓</span>
+                                </div>
+                                <div class="bg-white p-3 rounded-lg border border-gray-200 flex items-center justify-between">
+                                    <div class="flex items-center gap-2.5 overflow-hidden">
+                                        <span class="bg-blue-50 text-blue-600 p-1.5 rounded text-xs font-bold">JPG</span>
+                                        <div class="truncate text-xs">
+                                            <p class="font-bold text-gray-800 truncate">Buku_Tabungan_BRKS.jpg</p>
+                                            <p class="text-gray-400 text-[10px]">1.4 MB • Rekening Valid</p>
+                                        </div>
+                                    </div>
+                                    <span class="text-green-600 font-bold text-xs">✓</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm text-gray-600">
+                            <div>
+                                <h5 class="font-bold text-gray-900 mb-2">Dokumen yang Perlu Disiapkan:</h5>
+                                <ul class="space-y-2">
+                                    <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Surat Aktif Kuliah Dekanat/Rektorat</li>
+                                    <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Transkrip IPK min. 3.00 / Sertifikat SNBP</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-gray-900 mb-2 invisible sm:visible">Persyaratan Tambahan:</h5>
+                                <ul class="space-y-2">
+                                    <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Buku Rekening Bank Riau Kepri Syariah</li>
+                                    <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Surat Bebas Beasiswa Lain (Materai 10rb)</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 pt-6 border-t border-gray-100 flex justify-between items-center text-sm">
+                            <span class="text-gray-500">Butuh panduan lengkap format berkas?</span>
+                            <a href="{{ route('bantuan') }}" class="font-bold text-gray-900 hover:text-[#166534] flex items-center gap-1 transition-colors">Pusat Informasi & Bantuan <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></a>
+                        </div>
+                    </div>
+
+                    <!-- Panel Step 3 -->
+                    <div id="step-panel-3" class="hidden bg-white rounded-2xl border border-gray-200 shadow-lg p-8 h-full">
+                        <div class="flex justify-between items-center mb-6">
+                            <span class="bg-[#166534] text-white text-xs font-bold px-3 py-1 rounded-md">Tahap Aktif: 3</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">Pemeriksaan Sistem Terpadu & Sinkronisasi PDDIKTI</h3>
+                        <p class="text-gray-600 mb-8 text-sm leading-relaxed">
+                            Sistem kecerdasan artifisial (AI) dan engine validasi otomatis melakukan pencocokan silang data identitas dengan pangkalan data PDDIKTI Kemendikbudristek dan SIAK Kependudukan dalam hitungan detik.
+                        </p>
+
+                        <!-- Mockup AI Engine Audit -->
+                        <div class="bg-gray-50 rounded-xl p-6 border border-gray-100 mb-8 space-y-3">
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="text-xs font-bold text-gray-500">HASIL PENGECEKAN SISTEM OTOMATIS (AI SCAN)</label>
+                                <span class="text-[10px] bg-green-100 text-green-700 font-bold px-2 py-0.5 rounded">Otomatisasi Lolos</span>
+                            </div>
+                            <div class="space-y-2 text-xs">
+                                <div class="bg-white p-2.5 rounded-lg border border-gray-200 flex items-center justify-between">
+                                    <div class="flex items-center gap-2 text-gray-700">
+                                        <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                                        <span>Pencocokan NIK Database SIAK Disdukcapil:</span>
+                                    </div>
+                                    <span class="font-bold text-green-700">100% Sesuai & Domisili Batam Sah</span>
+                                </div>
+                                <div class="bg-white p-2.5 rounded-lg border border-gray-200 flex items-center justify-between">
+                                    <div class="flex items-center gap-2 text-gray-700">
+                                        <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                                        <span>Sinkronisasi Pangkalan Data PDDIKTI:</span>
+                                    </div>
+                                    <span class="font-bold text-green-700">Mahasiswa Aktif (NIM Terverifikasi)</span>
+                                </div>
+                                <div class="bg-white p-2.5 rounded-lg border border-gray-200 flex items-center justify-between">
+                                    <div class="flex items-center gap-2 text-gray-700">
+                                        <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                                        <span>Pemeriksaan Duplikasi Beasiswa:</span>
+                                    </div>
+                                    <span class="font-bold text-green-700">Bebas Beasiswa APBN / APBD Lain</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm text-gray-600">
+                            <div>
+                                <h5 class="font-bold text-gray-900 mb-2">Kriteria Validasi Sistem:</h5>
+                                <ul class="space-y-2">
+                                    <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> NIM terdaftar aktif di PDDikti resmi</li>
+                                    <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Kesesuaian nama pendaftar & KTP</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-gray-900 mb-2 invisible sm:visible">Kriteria Tambahan:</h5>
+                                <ul class="space-y-2">
+                                    <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Tidak terdeteksi beasiswa ganda aktif</li>
+                                    <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Keaslian format dokumen terverifikasi</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 pt-6 border-t border-gray-100 flex justify-between items-center text-sm">
+                            <span class="text-gray-500">Ada kendala saat sinkronisasi data?</span>
+                            <a href="{{ route('bantuan') }}" class="font-bold text-gray-900 hover:text-[#166534] flex items-center gap-1 transition-colors">Pusat Informasi & Bantuan <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></a>
+                        </div>
+                    </div>
+
+                    <!-- Panel Step 4 -->
+                    <div id="step-panel-4" class="hidden bg-white rounded-2xl border border-gray-200 shadow-lg p-8 h-full">
+                        <div class="flex justify-between items-center mb-6">
+                            <span class="bg-[#166534] text-white text-xs font-bold px-3 py-1 rounded-md">Tahap Aktif: 4</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">Pemeriksaan Verifikator Tim Disdik Kota Batam</h3>
+                        <p class="text-gray-600 mb-8 text-sm leading-relaxed">
+                            Setelah lolos saringan otomatis, berkas dinilai secara substantif oleh aparatur Tim Verifikator Dinas Pendidikan Kota Batam untuk memastikan peringkat kuota, pemenuhan syarat khusus, dan legalitas stempel.
+                        </p>
+
+                        <!-- Mockup Verifikator Review -->
+                        <div class="bg-gray-50 rounded-xl p-6 border border-gray-100 mb-8">
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="text-xs font-bold text-gray-500">LEMBAR REKOMENDASI AUDIT VERIFIKATOR</label>
+                                <span class="text-[10px] bg-emerald-100 text-[#166534] font-bold px-2 py-0.5 rounded">Rekomendasi Terbit</span>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg border border-gray-200 space-y-2 text-xs">
+                                <div class="flex justify-between border-b pb-2">
+                                    <span class="text-gray-500">Petugas Penelaah:</span>
+                                    <span class="font-bold text-gray-800">Tim Verifikasi Beasiswa Disdik Batam (NIP: 19840912...)</span>
+                                </div>
+                                <div class="flex justify-between border-b pb-2">
+                                    <span class="text-gray-500">Nomor Berita Acara:</span>
+                                    <span class="font-mono font-bold text-gray-800">BA.04/VERIF-DIKTI/BTM/2025</span>
+                                </div>
+                                <div class="pt-1">
+                                    <p class="text-gray-500 mb-1">Catatan Verifikator:</p>
+                                    <p class="bg-green-50 p-2.5 rounded border border-green-200 text-green-900 font-medium">
+                                        "Seluruh dokumen persyaratan akademik dan domisili memenuhi kualifikasi. Direkomendasikan masuk daftar nominasi penerima bantuan beasiswa semester ganjil 2025."
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm text-gray-600">
+                            <div>
+                                <h5 class="font-bold text-gray-900 mb-2">Hal yang Diperiksa Verifikator:</h5>
+                                <ul class="space-y-2">
+                                    <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Keabsahan tanda tangan pimpinan kampus</li>
+                                    <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Pemenuhan kuota per kecamatan/jalur</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-gray-900 mb-2 invisible sm:visible">Hal Tambahan:</h5>
+                                <ul class="space-y-2">
+                                    <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Keringanan afirmasi hinterland</li>
+                                    <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Klarifikasi dokumen bila ada keraguan</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 pt-6 border-t border-gray-100 flex justify-between items-center text-sm">
+                            <span class="text-gray-500">Perlu klarifikasi berkas permohonan?</span>
+                            <a href="{{ route('bantuan') }}" class="font-bold text-gray-900 hover:text-[#166534] flex items-center gap-1 transition-colors">Pusat Informasi & Bantuan <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></a>
+                        </div>
+                    </div>
+
+                    <!-- Panel Step 5 -->
+                    <div id="step-panel-5" class="hidden bg-white rounded-2xl border border-gray-200 shadow-lg p-8 h-full">
+                        <div class="flex justify-between items-center mb-6">
+                            <span class="bg-[#166534] text-white text-xs font-bold px-3 py-1 rounded-md">Tahap Aktif: 5</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">Penetapan SK Walikota & Penyaluran Dana Beasiswa</h3>
+                        <p class="text-gray-600 mb-8 text-sm leading-relaxed">
+                            Walikota Batam menerbitkan Surat Keputusan (SK) resmi penetapan penerima. Dana bantuan disalurkan langsung secara utuh ke rekening Bank Riau Kepri Syariah masing-masing mahasiswa tanpa perantara.
+                        </p>
+
+                        <!-- Mockup SK & Pencairan -->
+                        <div class="bg-gray-50 rounded-xl p-6 border border-gray-100 mb-8">
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="text-xs font-bold text-gray-500">PENYALURAN DANA & SK ELEKTRONIK RESMI</label>
+                                <span class="text-[10px] bg-green-100 text-green-800 font-bold px-2 py-0.5 rounded">Dana Disalurkan 100%</span>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg border border-gray-200 space-y-3 text-xs">
+                                <div class="flex justify-between items-center border-b pb-2">
+                                    <span class="text-gray-500">Nomor SK Walikota:</span>
+                                    <span class="font-mono font-bold text-gray-900">SK.WAKO/BTM/189/2025</span>
+                                </div>
+                                <div class="flex justify-between items-center border-b pb-2">
+                                    <span class="text-gray-500">Bank Penyalur Resmi:</span>
+                                    <span class="font-bold text-[#166534]">Bank Riau Kepri Syariah (BRK Syariah)</span>
+                                </div>
+                                <div class="flex justify-between items-center border-b pb-2">
+                                    <span class="text-gray-500">Pagu Bantuan Diterima:</span>
+                                    <span class="font-bold text-lg text-gray-900">Rp 6.000.000 - Rp 7.000.000</span>
+                                </div>
+                                <p class="text-green-700 font-medium text-[11px] flex items-center gap-1.5 pt-1">
+                                    <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                    Notifikasi pencairan otomatis dikirimkan ke nomor WhatsApp pemohon.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm text-gray-600">
+                            <div>
+                                <h5 class="font-bold text-gray-900 mb-2">Langkah Setelah Terbit SK:</h5>
+                                <ul class="space-y-2">
+                                    <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Unduh e-Sertifikat SK Walikota dari dashboard</li>
+                                    <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Cek mutasi rekening Bank Riau Kepri Syariah</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="font-bold text-gray-900 mb-2 invisible sm:visible">Langkah Tambahan:</h5>
+                                <ul class="space-y-2">
+                                    <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Konfirmasi tanda terima dana di portal</li>
+                                    <li class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Laporkan jika ada potongan / pungli liar</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 pt-6 border-t border-gray-100 flex justify-between items-center text-sm">
+                            <span class="text-gray-500">Ada kendala dalam penyaluran dana?</span>
+                            <a href="{{ route('bantuan') }}" class="font-bold text-gray-900 hover:text-[#166534] flex items-center gap-1 transition-colors">Pusat Informasi & Bantuan <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></a>
                         </div>
                     </div>
                 </div>
@@ -572,7 +836,7 @@
     </div>
 
     <!-- Lacak Progres Section -->
-    <div class="border-y border-gray-200 bg-white py-16">
+    <div id="section-lacak" class="border-y border-gray-200 bg-white py-16 scroll-mt-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="bg-gray-50 rounded-3xl p-8 lg:p-12 border border-gray-100 flex flex-col lg:flex-row items-center justify-between gap-12">
                 <div class="lg:w-1/2">
@@ -580,10 +844,30 @@
                     <h2 class="text-3xl font-bold text-gray-900 mt-2 mb-4">Lacak Progres Verifikasi Berkas Anda</h2>
                     <p class="text-gray-600 mb-8 text-sm">Masukkan 16 digit NIK atau Nomor Registrasi Berkas (Contoh: BTM-EDU-2025-0819) untuk memantau status secara langsung tanpa login akun.</p>
                     
-                    <form class="flex flex-col sm:flex-row gap-3">
-                        <input type="text" placeholder="Masukkan Nomor Registrasi / NIK..." class="flex-1 bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#166534] focus:border-[#166534] block w-full p-4 shadow-sm" required>
+                    <form id="lacak-form" onsubmit="handleLacakSubmit(event)" class="flex flex-col sm:flex-row gap-3">
+                        <input type="text" id="lacak-input" placeholder="Masukkan Nomor Registrasi / NIK..." class="flex-1 bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-[#166534] focus:border-[#166534] block w-full p-4 shadow-sm" required>
                         <button type="submit" class="text-white bg-[#166534] hover:bg-green-800 font-bold rounded-lg text-sm px-8 py-4 text-center transition-colors shadow-sm whitespace-nowrap">Lacak Berkas</button>
                     </form>
+
+                    <!-- Lacak Result Simulation Box (Hidden by default) -->
+                    <div id="lacak-result" class="hidden mt-6 bg-white border border-gray-200 rounded-2xl p-6 shadow-md transition-all">
+                        <div class="flex justify-between items-start mb-3 border-b pb-3">
+                            <div>
+                                <span class="text-[10px] uppercase font-bold text-gray-400">Nomor Registrasi:</span>
+                                <p id="result-reg-id" class="font-mono font-bold text-gray-900 text-base">BTM-EDU-2025-0819</p>
+                            </div>
+                            <span class="bg-amber-100 text-amber-800 font-bold text-xs px-2.5 py-1 rounded-full">Tahap 3: Verifikasi Sistem</span>
+                        </div>
+                        <div class="space-y-2 text-xs text-gray-600 mb-4">
+                            <p class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Data Kependudukan NIK: Terverifikasi Disdukcapil Batam</p>
+                            <p class="flex items-center gap-2"><svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> Berkas Digital: 4/4 Dokumen Terunggah Lengkap</p>
+                            <p class="flex items-center gap-2"><svg class="w-4 h-4 text-amber-500 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> Status Saat Ini: Pengecekan silang otomatis PDDIKTI sedang berlangsung</p>
+                        </div>
+                        <div class="flex justify-between items-center text-xs pt-3 border-t">
+                            <span class="text-gray-400">Estimasi Keputusan: 3 - 5 hari kerja</span>
+                            <a href="{{ route('bantuan') }}" class="font-bold text-[#166534] hover:underline">Butuh Bantuan?</a>
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- Info Box -->
@@ -608,25 +892,123 @@
                                 <p class="text-xs font-bold text-green-700 mt-0.5">+62 811-7700-0025</p>
                             </div>
                         </div>
+
+                        <div class="mt-4 pt-4 border-t border-gray-100">
+                            <a href="{{ route('bantuan') }}" class="block w-full text-center bg-gray-50 hover:bg-gray-100 text-gray-800 text-xs font-bold py-2 rounded-lg transition-colors">
+                                Kunjungi Pusat Bantuan & Kontak →
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Final Scripts / Footer placeholder for now, just to close HTML properly -->
-    <footer class="bg-white pt-10 pb-10">
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 pt-10 pb-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
              <div class="flex items-center gap-3">
                   <img class="h-8 md:h-10 w-auto" src="{{ asset('BATAM EDU-GOV AI RBG.png') }}" alt="Logo Footer">
                   <p class="text-xs text-gray-500">&copy; 2025 Dinas Pendidikan Kota Batam. Hak Cipta Dilindungi.</p>
              </div>
              <div class="flex gap-4 text-xs text-gray-500 font-medium">
-                  <a href="#" class="hover:text-gray-900">Kebijakan Privasi</a>
-                  <a href="#" class="hover:text-gray-900">Standar Audit AI</a>
-                  <a href="#" class="hover:text-gray-900">Kontak Darurat</a>
+                  <a href="{{ url('/') }}" onclick="setActiveNav('nav-beranda', true)" class="hover:text-gray-900">Beranda</a>
+                  <a href="#section-alur" onclick="setActiveNav('nav-alur', true)" class="hover:text-gray-900">Alur & Persyaratan</a>
+                  <a href="#section-lacak" onclick="setActiveNav('nav-lacak', true)" class="hover:text-gray-900">Lacak Berkas</a>
+                  <a href="{{ route('bantuan') }}" class="hover:text-gray-900 text-[#166534] font-bold">Pusat Bantuan</a>
              </div>
         </div>
     </footer>
+
+    <!-- Interactive Scripts for Steps, Tracking & Dynamic Navbar -->
+    <script>
+        const activeClass = 'nav-item bg-[#166534] text-white px-5 py-2 rounded-full text-sm font-semibold shadow-sm transition-all';
+        const inactiveClass = 'nav-item text-gray-300 hover:text-white px-5 py-2 rounded-full text-sm font-medium transition-colors';
+
+        let isManualNavClick = false;
+
+        function setActiveNav(activeId, manual = false) {
+            const navItems = ['nav-beranda', 'nav-alur', 'nav-lacak'];
+            navItems.forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                if (id === activeId) {
+                    el.className = activeClass;
+                } else {
+                    el.className = inactiveClass;
+                }
+            });
+
+            if (manual) {
+                isManualNavClick = true;
+                setTimeout(() => {
+                    isManualNavClick = false;
+                }, 1000);
+            }
+        }
+
+        // ScrollSpy to automatically move active green pill as user scrolls
+        window.addEventListener('scroll', () => {
+            if (isManualNavClick) return;
+
+            const scrollPos = window.scrollY + 180;
+            const alurSection = document.getElementById('section-alur');
+            const lacakSection = document.getElementById('section-lacak');
+
+            if (lacakSection && scrollPos >= lacakSection.offsetTop) {
+                setActiveNav('nav-lacak');
+            } else if (alurSection && scrollPos >= alurSection.offsetTop) {
+                setActiveNav('nav-alur');
+            } else {
+                setActiveNav('nav-beranda');
+            }
+        });
+
+        function selectStep(step) {
+            for (let i = 1; i <= 5; i++) {
+                const btn = document.getElementById(`step-btn-${i}`);
+                const num = document.getElementById(`step-num-${i}`);
+                const title = document.getElementById(`step-title-${i}`);
+                const desc = document.getElementById(`step-desc-${i}`);
+                const panel = document.getElementById(`step-panel-${i}`);
+
+                if (i === step) {
+                    btn.className = 'step-nav-btn w-full text-left bg-gray-50 border-l-4 border-[#166534] rounded-r-xl p-5 shadow-sm flex items-start gap-4 transition-all';
+                    num.className = 'w-8 h-8 rounded-full bg-[#166534] text-white flex shrink-0 items-center justify-center text-sm font-bold shadow-sm mt-1 transition-all';
+                    title.className = 'font-bold text-gray-900 transition-colors';
+                    desc.className = 'text-xs text-gray-500 mt-1';
+                    panel.classList.remove('hidden');
+                } else {
+                    btn.className = 'step-nav-btn w-full text-left bg-white border border-gray-100 rounded-xl p-5 flex items-start gap-4 hover:bg-gray-50 transition-all';
+                    num.className = 'w-8 h-8 rounded-full bg-gray-100 text-gray-500 flex shrink-0 items-center justify-center text-sm font-bold mt-1 transition-all';
+                    title.className = 'font-bold text-gray-600 transition-colors';
+                    desc.className = 'text-xs text-gray-400 mt-1';
+                    panel.classList.add('hidden');
+                }
+            }
+        }
+
+        function scrollToAndSelectStep(step) {
+            selectStep(step);
+            setActiveNav('nav-alur', true);
+            const section = document.getElementById('section-alur');
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function handleLacakSubmit(event) {
+            event.preventDefault();
+            const inputVal = document.getElementById('lacak-input').value.trim();
+            const resultBox = document.getElementById('lacak-result');
+            const resultRegId = document.getElementById('result-reg-id');
+            
+            if (inputVal) {
+                resultRegId.innerText = inputVal.toUpperCase();
+                resultBox.classList.remove('hidden');
+                resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+    </script>
 </body>
 </html>
