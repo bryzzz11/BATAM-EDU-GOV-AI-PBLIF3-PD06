@@ -48,4 +48,14 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function pengajuans()
+    {
+        return $this->hasMany(Pengajuan::class);
+    }
+
+    public function latestPengajuan()
+    {
+        return $this->hasOne(Pengajuan::class)->latestOfMany();
+    }
 }

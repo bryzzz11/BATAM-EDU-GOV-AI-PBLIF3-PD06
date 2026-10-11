@@ -328,23 +328,8 @@
 
     </div>
 
-    <!-- Footer -->
-    <footer class="bg-white border-t border-gray-200 pt-10 pb-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
-             <div class="flex items-center gap-3">
-                  <a href="{{ url('/') }}">
-                      <img class="h-8 md:h-10 w-auto" src="{{ asset('BATAM EDU-GOV AI RBG.png') }}" alt="Logo Footer">
-                  </a>
-                  <p class="text-xs text-gray-500">&copy; 2025 Dinas Pendidikan Kota Batam. Hak Cipta Dilindungi.</p>
-             </div>
-             <div class="flex gap-4 text-xs text-gray-500 font-medium">
-                  <a href="{{ url('/') }}" class="hover:text-gray-900">Kembali ke Beranda</a>
-                  <a href="{{ url('/#section-alur') }}" class="hover:text-gray-900">Alur & Persyaratan</a>
-                  <a href="{{ url('/#section-lacak') }}" class="hover:text-gray-900">Lacak Berkas</a>
-                  <a href="{{ route('bantuan') }}" class="hover:text-gray-900 font-bold text-[#166534]">Pusat Bantuan</a>
-             </div>
-        </div>
-    </footer>
+    <!-- Footer Component -->
+    <x-footer />
 
     <!-- Interactive Scripts -->
     <script>

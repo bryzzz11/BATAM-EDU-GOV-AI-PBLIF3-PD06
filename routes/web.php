@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PengajuanController;
 use Illuminate\Support\Facades\Route;
 
 // ─── Public Routes ────────────────────────────────────────────────────
@@ -28,8 +29,14 @@ Route::middleware('guest')->group(function () {
 // ─── Protected Routes (hanya untuk user yang sudah login) ─────────────
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        $latestPengajuan = auth()->user()->latestPengajuan;
+        return view('dashboard', compact('latestPengajuan'));
     })->name('dashboard');
+
+    Route::get('/pengajuan', [PengajuanController::class, 'index'])->name('pengajuan.index');
+    Route::get('/pengajuan/{jalur}', [PengajuanController::class, 'form'])->name('pengajuan.form');
+    Route::post('/pengajuan/{jalur}', [PengajuanController::class, 'store'])->name('pengajuan.store');
+    Route::get('/pengajuan/{id}/sukses', [PengajuanController::class, 'sukses'])->name('pengajuan.sukses');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
