@@ -162,10 +162,10 @@
                 </div>
             @endif
 
-            <button type="button" class="google-btn w-full flex items-center justify-center gap-3 py-3 px-4 bg-white rounded-xl text-sm font-semibold text-gray-700 mb-3 focus:outline-none focus:ring-2 focus:ring-green-700 focus:ring-offset-2">
+            <a href="{{ route('pegawai.login') }}" class="google-btn w-full flex items-center justify-center gap-3 py-3 px-4 bg-white rounded-xl text-sm font-semibold text-gray-700 mb-3 focus:outline-none focus:ring-2 focus:ring-green-700 focus:ring-offset-2">
                 <img src="{{ asset('Lambang_Kota_Batam.png') }}" alt="Lambang Kota Batam" class="h-6 w-6 object-contain flex-shrink-0">
                 <span>Login sebagai Pegawai Pemko</span>
-            </button>
+            </a>
 
             {{-- Google OAuth Button --}}
             <a href="{{ route('auth.google') }}" class="google-btn w-full flex items-center justify-center gap-3 py-3 px-4 bg-white rounded-xl text-sm font-semibold text-gray-700 mb-5">

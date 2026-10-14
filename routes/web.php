@@ -18,6 +18,9 @@ Route::middleware('guest')->group(function () {
     Route::get('/login',    [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login',   [AuthController::class, 'login']);
 
+    Route::get('/pegawai/login', [AuthController::class, 'showPegawaiLogin'])->name('pegawai.login');
+    Route::post('/pegawai/login', [AuthController::class, 'pegawaiLogin'])->middleware('throttle:6,1')->name('pegawai.login.submit');
+
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register',[AuthController::class, 'register']);
 
@@ -27,7 +30,7 @@ Route::middleware('guest')->group(function () {
 });
 
 // ─── Protected Routes (hanya untuk user yang sudah login) ─────────────
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'role:pemohon'])->group(function () {
     Route::get('/dashboard', function () {
         $latestPengajuan = auth()->user()->latestPengajuan;
         return view('dashboard', compact('latestPengajuan'));
@@ -38,5 +41,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/pengajuan/{jalur}', [PengajuanController::class, 'store'])->name('pengajuan.store');
     Route::get('/pengajuan/{id}/sukses', [PengajuanController::class, 'sukses'])->name('pengajuan.sukses');
 
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
+
+Route::middleware(['auth', 'role:admin,verifikator,pimpinan'])->group(function () {
+    Route::get('/pegawai/dashboard', function () {
+        return view('pegawai.dashboard');
+    })->name('pegawai.dashboard');
+});
+
+Route::middleware('auth')->post('/logout', [AuthController::class, 'logout'])->name('logout');
