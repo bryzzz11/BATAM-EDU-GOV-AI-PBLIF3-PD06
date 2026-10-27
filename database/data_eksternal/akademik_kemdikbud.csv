@@ -1,0 +1,11 @@
+nik,nisn,nama_lengkap,asal_sekolah,jurusan_sekolah,tahun_lulus,jalur_seleksi,nama_kampus_diterima,program_studi_diterima,nilai_rata_rapor,skor_utbk,status_kelulusan
+217115864469,0061234568,Maya Lestari,SMA Negeri 2 Batam,MIPA,2025,HINTERLAND,Politeknik Negeri Batam,Teknik Informatika,87.50,null,DITERIMA
+2171010508020001,0061234567,Bryan Abisai Immanuel Sitorus,SMA Negeri 1 Batam,MIPA,2025,SNBP,Politeknik Negeri Batam,Teknik Informatika,88.77,null,DITERIMA
+2171025501030002,0069876543,Siti Nurhaliza,SMA Negeri 3 Batam,IPS,2025,SNBT,Universitas Maritim Raja Ali Haji,Manajemen,85.20,625.50,DITERIMA
+2171031206020003,0065432198,Ahmad Fauzi,SMK Negeri 1 Batam,Teknik Mesin,2025,HINTERLAND,Politeknik Negeri Batam,Teknik Mesin,86.00,null,DITERIMA
+2171044409030004,0067891234,Dewi Sartika,SMA Negeri 4 Batam,MIPA,2025,SNBP,Universitas Riau,Pendidikan Dokter,92.40,null,DITERIMA
+2171051512020005,0063216549,Rian Pratama,SMA Negeri 1 Batam,MIPA,2025,SNBT,Institut Teknologi Bandung,Teknik Elektro,89.10,710.25,DITERIMA
+2171066703030006,0064567891,Putri Ayu Lestari,SMA Negeri 5 Batam,IPS,2025,SNBP,Universitas Gadjah Mada,Akuntansi,90.50,null,DITERIMA
+2171072007020007,0068529631,Fajar Setiawan,SMK Negeri 2 Batam,Teknik Komputer,2025,SNBT,Politeknik Negeri Batam,Rekayasa Keamanan Siber,84.00,595.00,DITERIMA
+2171085202030008,0061472583,Nurul Hidayah,SMA Negeri 8 Batam,MIPA,2025,SNBP,Universitas Indonesia,Ilmu Komputer,93.20,null,DITERIMA
+2171091811020009,0069638520,Rizky Ramadhan,SMA Negeri 1 Tanjung Pinang,IPS,2024,SNBT,Universitas Terbuka,Ilmu Komunikasi,78.00,450.00,TIDAK_LOLOS

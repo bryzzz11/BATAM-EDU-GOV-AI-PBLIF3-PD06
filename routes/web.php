@@ -40,13 +40,24 @@ Route::middleware(['auth', 'role:pemohon'])->group(function () {
     Route::get('/pengajuan/{jalur}', [PengajuanController::class, 'form'])->name('pengajuan.form');
     Route::post('/pengajuan/{jalur}', [PengajuanController::class, 'store'])->name('pengajuan.store');
     Route::get('/pengajuan/{id}/sukses', [PengajuanController::class, 'sukses'])->name('pengajuan.sukses');
-
+    Route::get('/pengajuan/{id}/perbaikan', [PengajuanController::class, 'editPerbaikan'])->name('pengajuan.perbaikan');
+    Route::post('/pengajuan/{id}/perbaikan', [PengajuanController::class, 'updatePerbaikan'])->name('pengajuan.perbaikan.update');
 });
 
-Route::middleware(['auth', 'role:admin,verifikator,pimpinan'])->group(function () {
-    Route::get('/pegawai/dashboard', function () {
-        return view('pegawai.dashboard');
-    })->name('pegawai.dashboard');
+// ─── Pegawai Routes (Admin, Verifikator, Pimpinan) ────────────────────
+use App\Http\Controllers\PegawaiController;
+
+Route::middleware(['auth', 'role:admin,verifikator,pimpinan'])->prefix('pegawai')->name('pegawai.')->group(function () {
+    Route::get('/dashboard', [PegawaiController::class, 'dashboard'])->name('dashboard');
+    Route::get('/data-eksternal', [PegawaiController::class, 'dataEksternal'])->name('data-eksternal');
+    Route::post('/data-eksternal/import', [PegawaiController::class, 'importDataEksternal'])->name('data-eksternal.import');
+    Route::delete('/data-eksternal/{type}/{id}', [PegawaiController::class, 'deleteDataEksternal'])->name('data-eksternal.delete');
+    Route::get('/data-eksternal/template/{type}', [PegawaiController::class, 'downloadTemplate'])->name('data-eksternal.template');
+    Route::get('/pengajuan/{id}', [PegawaiController::class, 'show'])->name('pengajuan.show');
+    Route::post('/pengajuan/{id}/teruskan', [PegawaiController::class, 'teruskan'])->name('pengajuan.teruskan');
+    Route::post('/pengajuan/{id}/kembalikan', [PegawaiController::class, 'kembalikan'])->name('pengajuan.kembalikan');
+    Route::post('/pengajuan/{id}/tolak', [PegawaiController::class, 'tolak'])->name('pengajuan.tolak');
+    Route::post('/pengajuan/{id}/putuskan', [PegawaiController::class, 'putuskan'])->name('pengajuan.putuskan');
 });
 
 Route::middleware('auth')->post('/logout', [AuthController::class, 'logout'])->name('logout');

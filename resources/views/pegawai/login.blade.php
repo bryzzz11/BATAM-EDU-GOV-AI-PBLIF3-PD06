@@ -85,9 +85,9 @@
                         <legend class="sr-only">Pilih peran pegawai</legend>
                         <div class="role-selector relative grid grid-cols-3 rounded-xl bg-blue-50 p-1">
                             <span class="role-indicator absolute rounded-lg bg-white shadow-sm" aria-hidden="true"></span>
-                            @foreach (['admin' => 'Admin', 'verifikator' => 'Verifikator', 'decisionmaker' => 'Pengambil Keputusan'] as $role => $label)
+                            @foreach (['admin' => 'Admin', 'verifikator' => 'Verifikator', 'pimpinan' => 'Pengambil Keputusan'] as $role => $label)
                                 <label class="relative z-10 cursor-pointer">
-                                    <input type="radio" name="role" value="{{ $role }}" form="pegawai-login-form" class="peer sr-only" @checked(old('role', 'admin') === $role)>
+                                    <input type="radio" name="role" id="role-radio-{{ $role }}" value="{{ $role }}" form="pegawai-login-form" class="peer sr-only" @checked(old('role', 'admin') === $role)>
                                     <span class="block rounded-lg px-2 py-3 text-center text-xs font-semibold text-gray-600 transition-colors peer-checked:text-[#166534] sm:text-sm">
                                         {{ $label }}
                                     </span>
@@ -105,6 +105,25 @@
                     <p class="mt-2 text-sm leading-relaxed text-gray-500">
                         Masuk menggunakan kredensial akun pegawai Pemko Batam yang terdaftar.
                     </p>
+                </div>
+
+                <!-- Quick Demo Fill Pills -->
+                <div class="mb-6 p-3 bg-gray-50 border border-gray-200 rounded-2xl">
+                    <p class="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        <span>Pintasan Akun Demo (Klik untuk Isi Otomatis):</span>
+                    </p>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button type="button" onclick="fillDemoPegawai('admin', 'admin@batam.go.id', 'password')" class="px-2.5 py-1.5 bg-white hover:bg-green-50 border border-gray-200 hover:border-green-300 rounded-xl text-xs font-bold text-gray-700 hover:text-green-800 transition-all text-center">
+                            Admin
+                        </button>
+                        <button type="button" onclick="fillDemoPegawai('verifikator', 'verifikator@batam.go.id', 'password')" class="px-2.5 py-1.5 bg-white hover:bg-green-50 border border-gray-200 hover:border-green-300 rounded-xl text-xs font-bold text-gray-700 hover:text-green-800 transition-all text-center">
+                            Verifikator
+                        </button>
+                        <button type="button" onclick="fillDemoPegawai('pimpinan', 'pimpinan@batam.go.id', 'password')" class="px-2.5 py-1.5 bg-white hover:bg-green-50 border border-gray-200 hover:border-green-300 rounded-xl text-xs font-bold text-gray-700 hover:text-green-800 transition-all text-center truncate">
+                            Pimpinan
+                        </button>
+                    </div>
                 </div>
 
                 @if ($errors->any())
@@ -162,6 +181,19 @@
                 <a href="{{ route('login') }}" class="mt-6 block text-center text-sm font-medium text-gray-500 transition hover:text-[#166534]">
                     Kembali ke login pemohon
                 </a>
+
+                <script>
+                    function fillDemoPegawai(role, identifier, password) {
+                        const radio = document.getElementById('role-radio-' + role);
+                        if (radio) {
+                            radio.checked = true;
+                        }
+                        const idInput = document.getElementById('identifier');
+                        if (idInput) idInput.value = identifier;
+                        const pwdInput = document.getElementById('password');
+                        if (pwdInput) pwdInput.value = password;
+                    }
+                </script>
             </div>
         </section>
     </main>

@@ -113,7 +113,7 @@ class PengajuanController extends Controller
         // Rules Validasi
         $rules = [
             'nama_lengkap'   => 'required|string|max:255',
-            'nik'            => 'required|numeric|digits:16',
+            'nik'            => 'required|numeric|digits_between:12,16',
             'tempat_lahir'   => 'required|string|max:100',
             'tanggal_lahir'  => 'required|date',
             'jenis_kelamin'  => 'required|in:Laki-laki,Perempuan',
@@ -126,8 +126,9 @@ class PengajuanController extends Controller
             'program_studi'  => 'required|string|max:255',
             'nim'            => 'required|string|max:50',
             'semester'       => 'required|integer|min:1|max:14',
-            'ipk_nilai'      => 'nullable|numeric|min:0|max:4.00',
+            'ipk_nilai'      => 'nullable|numeric|min:0|max:100.00',
             'file_ktp'       => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'ocr_data'       => 'nullable|string',
         ];
 
         if ($jalurKey === 'snbp') {
@@ -172,6 +173,15 @@ class PengajuanController extends Controller
         $prefix = strtoupper($jalurKey);
         $nomorRegistrasi = 'BTM-' . $prefix . '-' . date('Y') . '-' . str_pad(mt_rand(1, 9999), 4, '0', STR_PAD_LEFT);
 
+        // Parse OCR Data jika dikirim dari frontend Tesseract
+        $parsedOcrData = null;
+        if ($request->filled('ocr_data')) {
+            $decoded = json_decode($request->input('ocr_data'), true);
+            if (is_array($decoded)) {
+                $parsedOcrData = $decoded;
+            }
+        }
+
         // Simpan Record Pengajuan
         $pengajuan = Pengajuan::create([
             'user_id'          => Auth::id(),
@@ -197,8 +207,16 @@ class PengajuanController extends Controller
             'file_utbk'        => $fileUtbkPath,
             'status'           => 'menunggu_verifikasi',
             'catatan'          => 'Berkas berhasil diajukan dan siap diverifikasi.',
-            'ocr_data'         => null,
+            'ocr_data'         => $parsedOcrData,
         ]);
+
+        // Jalankan Analisis xAI secara otomatis terhadap data eksternal
+        try {
+            $xaiAnalysis = \App\Services\XAIService::analyze($pengajuan);
+            $pengajuan->update(['xai_data' => $xaiAnalysis]);
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::warning('xAI analysis error: ' . $e->getMessage());
+        }
 
         return redirect()->route('pengajuan.sukses', $pengajuan->id);
     }
@@ -211,5 +229,96 @@ class PengajuanController extends Controller
         $pengajuan = Pengajuan::where('user_id', Auth::id())->findOrFail($id);
 
         return view('pengajuan.sukses', compact('pengajuan'));
+    }
+
+    /**
+     * Halaman Perbaikan Berkas jika diminta oleh Verifikator
+     */
+    public function editPerbaikan($id)
+    {
+        $pengajuan = Pengajuan::where('user_id', Auth::id())->findOrFail($id);
+
+        if ($pengajuan->status !== 'perlu_perbaikan') {
+            return redirect()->route('dashboard')->with('info', 'Status pengajuan Anda saat ini tidak memerlukan perbaikan.');
+        }
+
+        $jalurKey = strtolower($pengajuan->jalur);
+        return view('pengajuan.perbaikan', compact('pengajuan', 'jalurKey'));
+    }
+
+    /**
+     * Simpan Pembaruan Berkas Perbaikan
+     */
+    public function updatePerbaikan(Request $request, $id)
+    {
+        $pengajuan = Pengajuan::where('user_id', Auth::id())->findOrFail($id);
+
+        if ($pengajuan->status !== 'perlu_perbaikan') {
+            return redirect()->route('dashboard')->with('error', 'Status pengajuan tidak valid untuk perbaikan.');
+        }
+
+        $rules = [
+            'nama_lengkap'   => 'required|string|max:255',
+            'nik'            => 'required|numeric|digits_between:12,16',
+            'tempat_lahir'   => 'required|string|max:100',
+            'tanggal_lahir'  => 'required|date',
+            'jenis_kelamin'  => 'required|in:Laki-laki,Perempuan',
+            'no_hp'          => 'required|string|max:20',
+            'email'          => 'required|email|max:255',
+            'kecamatan'      => 'required|string|max:100',
+            'kelurahan'      => 'required|string|max:100',
+            'alamat_lengkap' => 'required|string',
+            'nama_kampus'    => 'required|string|max:255',
+            'program_studi'  => 'required|string|max:255',
+            'nim'            => 'required|string|max:50',
+            'semester'       => 'required|integer|min:1|max:14',
+            'ipk_nilai'      => 'nullable|numeric|min:0|max:100.00',
+            'file_ktp'       => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'file_raport'    => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'file_utbk'      => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+        ];
+
+        $validated = $request->validate($rules);
+
+        $destinationPath = public_path('uploads/pengajuan');
+        if (!file_exists($destinationPath)) {
+            mkdir($destinationPath, 0755, true);
+        }
+
+        if ($request->hasFile('file_ktp')) {
+            $ktpFile = $request->file('file_ktp');
+            $ktpFileName = 'ktp_' . time() . '_' . Str::random(6) . '.' . $ktpFile->getClientOriginalExtension();
+            $ktpFile->move($destinationPath, $ktpFileName);
+            $validated['file_ktp'] = 'uploads/pengajuan/' . $ktpFileName;
+        }
+
+        if ($request->hasFile('file_raport')) {
+            $raportFile = $request->file('file_raport');
+            $raportFileName = 'raport_' . time() . '_' . Str::random(6) . '.' . $raportFile->getClientOriginalExtension();
+            $raportFile->move($destinationPath, $raportFileName);
+            $validated['file_raport'] = 'uploads/pengajuan/' . $raportFileName;
+        }
+
+        if ($request->hasFile('file_utbk')) {
+            $utbkFile = $request->file('file_utbk');
+            $utbkFileName = 'utbk_' . time() . '_' . Str::random(6) . '.' . $utbkFile->getClientOriginalExtension();
+            $utbkFile->move($destinationPath, $utbkFileName);
+            $validated['file_utbk'] = 'uploads/pengajuan/' . $utbkFileName;
+        }
+
+        $validated['status'] = 'menunggu_verifikasi';
+        $validated['catatan'] = 'Pemohon telah memperbarui dan mengirimkan ulang perbaikan berkas.';
+
+        $pengajuan->update($validated);
+
+        // Re-analyze xAI
+        try {
+            $xaiAnalysis = \App\Services\XAIService::analyze($pengajuan);
+            $pengajuan->update(['xai_data' => $xaiAnalysis]);
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::warning('xAI re-analysis error: ' . $e->getMessage());
+        }
+
+        return redirect()->route('dashboard')->with('success', 'Perbaikan berkas Anda telah berhasil dikirimkan kembali ke Verifikator!');
     }
 }

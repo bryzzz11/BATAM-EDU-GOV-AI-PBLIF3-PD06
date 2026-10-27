@@ -186,6 +186,28 @@
                     </div>
                 @endif
 
+                <!-- Urgent Banner jika Berkas Memerlukan Perbaikan -->
+                @if(isset($latestPengajuan) && $latestPengajuan && $latestPengajuan->status === 'perlu_perbaikan')
+                    <div class="p-6 sm:p-7 bg-gradient-to-r from-amber-500 via-amber-600 to-orange-600 rounded-3xl text-white shadow-lg space-y-3">
+                        <div class="flex items-center gap-2 text-[10px] font-black uppercase tracking-wider bg-black/25 px-3 py-1 rounded-full w-fit">
+                            <span class="w-2 h-2 rounded-full bg-white animate-ping"></span>
+                            Tindakan Diperlukan: Perbaikan Berkas
+                        </div>
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <div>
+                                <h3 class="text-xl font-black">Berkas Anda Memerlukan Perbaikan</h3>
+                                <p class="text-xs text-amber-100 mt-1 max-w-2xl leading-relaxed">
+                                    <strong>Catatan Petugas Verifikator:</strong> "{{ $latestPengajuan->catatan }}"
+                                </p>
+                            </div>
+                            <a href="{{ route('pengajuan.perbaikan', $latestPengajuan->id) }}" class="px-5 py-3 rounded-2xl bg-white text-amber-900 hover:bg-amber-50 font-black text-xs shadow-md transition-all shrink-0 flex items-center gap-2">
+                                <span>Perbaiki Berkas Sekarang</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            </a>
+                        </div>
+                    </div>
+                @endif
+
                 <!-- ========================================================== -->
                 <!-- HEADER TITLE SECTION                                       -->
                 <!-- ========================================================== -->
@@ -219,13 +241,47 @@
                                 <span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-[11px] font-mono">[01]</span>
                             </div>
                             @if(isset($latestPengajuan) && $latestPengajuan)
-                                <div class="flex items-center gap-2.5 mb-1.5">
-                                    <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
-                                    <h3 class="text-xl font-extrabold text-emerald-800">Tahap Verifikasi</h3>
-                                </div>
-                                <span class="inline-block px-2.5 py-1 rounded-md bg-green-50 text-[#166534] border border-green-200 text-xs font-mono font-bold">
-                                    {{ $latestPengajuan->nomor_registrasi }}
-                                </span>
+                                @if($latestPengajuan->status === 'perlu_perbaikan')
+                                    <div class="flex items-center gap-2 mb-1.5">
+                                        <span class="w-3 h-3 rounded-full bg-amber-500 animate-pulse"></span>
+                                        <h3 class="text-lg font-extrabold text-amber-800">Perlu Perbaikan</h3>
+                                    </div>
+                                    <span class="inline-block px-2.5 py-1 rounded-md bg-amber-100 text-amber-900 border border-amber-300 text-xs font-mono font-bold">
+                                        {{ $latestPengajuan->nomor_registrasi }}
+                                    </span>
+                                @elseif($latestPengajuan->status === 'menunggu_keputusan')
+                                    <div class="flex items-center gap-2 mb-1.5">
+                                        <span class="w-3 h-3 rounded-full bg-purple-500 animate-pulse"></span>
+                                        <h3 class="text-lg font-extrabold text-purple-800">Menunggu Pimpinan</h3>
+                                    </div>
+                                    <span class="inline-block px-2.5 py-1 rounded-md bg-purple-100 text-purple-900 border border-purple-300 text-xs font-mono font-bold">
+                                        {{ $latestPengajuan->nomor_registrasi }}
+                                    </span>
+                                @elseif($latestPengajuan->status === 'disetujui')
+                                    <div class="flex items-center gap-2 mb-1.5">
+                                        <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                                        <h3 class="text-lg font-extrabold text-green-800">Beasiswa Diterima!</h3>
+                                    </div>
+                                    <span class="inline-block px-2.5 py-1 rounded-md bg-green-100 text-green-900 border border-green-300 text-xs font-mono font-bold">
+                                        {{ $latestPengajuan->nomor_registrasi }}
+                                    </span>
+                                @elseif($latestPengajuan->status === 'ditolak')
+                                    <div class="flex items-center gap-2 mb-1.5">
+                                        <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                                        <h3 class="text-lg font-extrabold text-red-800">Belum Berhasil</h3>
+                                    </div>
+                                    <span class="inline-block px-2.5 py-1 rounded-md bg-red-100 text-red-900 border border-red-300 text-xs font-mono font-bold">
+                                        {{ $latestPengajuan->nomor_registrasi }}
+                                    </span>
+                                @else
+                                    <div class="flex items-center gap-2 mb-1.5">
+                                        <span class="w-3 h-3 rounded-full bg-blue-500 animate-pulse"></span>
+                                        <h3 class="text-lg font-extrabold text-blue-800">Tahap Verifikasi</h3>
+                                    </div>
+                                    <span class="inline-block px-2.5 py-1 rounded-md bg-blue-100 text-blue-900 border border-blue-300 text-xs font-mono font-bold">
+                                        {{ $latestPengajuan->nomor_registrasi }}
+                                    </span>
+                                @endif
                             @else
                                 <div class="flex items-center gap-2.5 mb-2">
                                     <span class="w-3 h-3 rounded-full bg-amber-500"></span>
@@ -236,7 +292,7 @@
                         <div class="mt-4 pt-4 border-t border-gray-100">
                             @if(isset($latestPengajuan) && $latestPengajuan)
                                 <p class="text-xs text-gray-500 leading-relaxed">
-                                    Jalur: <strong class="text-gray-800">{{ $latestPengajuan->jalur }}</strong> &bull; Berkas Anda sedang diproses oleh sistem.
+                                    Jalur: <strong class="text-gray-800">{{ $latestPengajuan->jalur }}</strong> &bull; {{ $latestPengajuan->catatan ?? 'Berkas sedang diproses sistem.' }}
                                 </p>
                             @else
                                 <p class="text-xs text-gray-500 leading-relaxed">

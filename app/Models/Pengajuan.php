@@ -36,11 +36,13 @@ class Pengajuan extends Model
         'status',
         'catatan',
         'ocr_data',
+        'xai_data',
     ];
 
     protected $casts = [
         'tanggal_lahir' => 'date',
         'ocr_data' => 'array',
+        'xai_data' => 'array',
         'ipk_nilai' => 'float',
     ];
 
