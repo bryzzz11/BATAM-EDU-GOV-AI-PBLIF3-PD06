@@ -195,14 +195,14 @@
                                     Scan e-KTP Kota Batam
                                 </span>
                                 @if($pengajuan->file_ktp)
-                                    <a href="{{ asset($pengajuan->file_ktp) }}" target="_blank" class="px-2.5 py-1 rounded-lg bg-white border border-gray-300 hover:border-gray-400 text-[11px] font-bold text-gray-700">
+                                    <a href="{{ route('file.serve', ['path' => $pengajuan->file_ktp]) }}" target="_blank" class="px-2.5 py-1 rounded-lg bg-white border border-gray-300 hover:border-gray-400 text-[11px] font-bold text-gray-700">
                                         Lihat Asli ↗
                                     </a>
                                 @endif
                             </div>
                             @if($pengajuan->file_ktp)
                                 <div class="rounded-xl overflow-hidden border border-gray-300 bg-black flex items-center justify-center max-h-48">
-                                    <img src="{{ asset($pengajuan->file_ktp) }}" alt="e-KTP" class="max-h-48 object-contain">
+                                    <img src="{{ route('file.serve', ['path' => $pengajuan->file_ktp]) }}" alt="e-KTP" class="max-h-48 object-contain">
                                 </div>
                             @else
                                 <p class="text-xs text-red-500 italic">Belum ada file KTP terlampir.</p>
@@ -217,12 +217,12 @@
                                         <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                                         Scan Rapor / Transkrip Nilai
                                     </span>
-                                    <a href="{{ asset($pengajuan->file_raport) }}" target="_blank" class="px-2.5 py-1 rounded-lg bg-white border border-gray-300 hover:border-gray-400 text-[11px] font-bold text-gray-700">
+                                    <a href="{{ route('file.serve', ['path' => $pengajuan->file_raport]) }}" target="_blank" class="px-2.5 py-1 rounded-lg bg-white border border-gray-300 hover:border-gray-400 text-[11px] font-bold text-gray-700">
                                         Lihat Asli ↗
                                     </a>
                                 </div>
                                 <div class="rounded-xl overflow-hidden border border-gray-300 bg-black flex items-center justify-center max-h-48">
-                                    <img src="{{ asset($pengajuan->file_raport) }}" alt="Rapor" class="max-h-48 object-contain">
+                                    <img src="{{ route('file.serve', ['path' => $pengajuan->file_raport]) }}" alt="Rapor" class="max-h-48 object-contain">
                                 </div>
                             </div>
                         @endif
@@ -234,12 +234,12 @@
                                         <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                                         Sertifikat Nilai UTBK
                                     </span>
-                                    <a href="{{ asset($pengajuan->file_utbk) }}" target="_blank" class="px-2.5 py-1 rounded-lg bg-white border border-gray-300 hover:border-gray-400 text-[11px] font-bold text-gray-700">
+                                    <a href="{{ route('file.serve', ['path' => $pengajuan->file_utbk]) }}" target="_blank" class="px-2.5 py-1 rounded-lg bg-white border border-gray-300 hover:border-gray-400 text-[11px] font-bold text-gray-700">
                                         Lihat Asli ↗
                                     </a>
                                 </div>
                                 <div class="rounded-xl overflow-hidden border border-gray-300 bg-black flex items-center justify-center max-h-48">
-                                    <img src="{{ asset($pengajuan->file_utbk) }}" alt="UTBK" class="max-h-48 object-contain">
+                                    <img src="{{ route('file.serve', ['path' => $pengajuan->file_utbk]) }}" alt="UTBK" class="max-h-48 object-contain">
                                 </div>
                             </div>
                         @endif
@@ -393,7 +393,6 @@
                             </div>
                         </div>
                     @endif
-                    </div>
                 </div>
 
                 <!-- ACTION DECISION PANEL -->

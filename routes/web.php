@@ -61,3 +61,33 @@ Route::middleware(['auth', 'role:admin,verifikator,pimpinan'])->prefix('pegawai'
 });
 
 Route::middleware('auth')->post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// ─── Protected File Serving (dokumen dari storage, bukan public) ───────
+Route::middleware('auth')->get('/file/{path}', function (string $path) {
+    // Cek lokasi baru (storage) dulu, fallback ke lokasi lama (public) untuk backward compat
+    $fullPath = storage_path('app/' . $path);
+    if (!file_exists($fullPath)) {
+        // Backward compat: file lama mungkin masih di public/
+        $fullPath = public_path($path);
+        if (!file_exists($fullPath)) {
+            abort(404);
+        }
+    }
+
+    // Pemohon hanya boleh akses file milik sendiri
+    $user = auth()->user();
+    if ($user->role === 'pemohon') {
+        $ownsFile = \App\Models\Pengajuan::where('user_id', $user->id)
+            ->where(function ($q) use ($path) {
+                $q->where('file_ktp', $path)
+                  ->orWhere('file_raport', $path)
+                  ->orWhere('file_utbk', $path);
+            })->exists();
+
+        if (!$ownsFile) {
+            abort(403);
+        }
+    }
+
+    return response()->file($fullPath);
+})->where('path', '.*')->name('file.serve');

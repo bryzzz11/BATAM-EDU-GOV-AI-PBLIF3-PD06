@@ -10,12 +10,18 @@ import sys
 import json
 import os
 import numpy as np
+import pickle
 from sklearn.ensemble import RandomForestClassifier
 
-def train_baseline_model():
+# Path file model yang di-cache
+MODEL_CACHE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'model_cache')
+MODEL_CACHE_PATH = os.path.join(MODEL_CACHE_DIR, 'xai_rf_model.pkl')
+MODEL_VERSION = '1.2'  # Bumped: expanded training dataset (140+ samples)
+
+
+def get_training_data():
     """
-    Melatih model Machine Learning baseline (Random Forest) untuk klasifikasi
-    kelayakan beasiswa berdasarkan parameter verifikasi silang data eksternal.
+    Data latih komprehensif untuk klasifikasi kelayakan beasiswa Batam.
     
     Fitur:
     0: nik_valid (1/0)
@@ -26,27 +32,127 @@ def train_baseline_model():
     5: nilai_normalized (0.0 - 1.0)
     6: selisih_nilai (selisih absolut terhadap pangkalan sekolah)
     """
-    X_train = np.array([
-        # [nik, aktif, nama_sim, domisili, kelulusan, nilai, selisih] -> Label: 1 (Lolos), 0 (Tidak Lolos)
-        [1.0, 1.0, 1.0, 1.0, 1.0, 0.90, 0.0],  # Sangat Layak
-        [1.0, 1.0, 0.95, 1.0, 1.0, 0.88, 0.0], # Layak (Kasus SNBP)
-        [1.0, 1.0, 0.98, 1.0, 1.0, 0.85, 0.2], # Layak
-        [1.0, 1.0, 0.90, 1.0, 1.0, 0.82, 0.1], # Layak Hinterland
-        [1.0, 1.0, 1.0, 1.0, 1.0, 0.95, 0.0],  # Sangat Layak
-        [1.0, 0.0, 0.90, 1.0, 1.0, 0.88, 0.0], # Status Dukcapil Nonaktif -> Tidak
-        [0.0, 0.0, 0.50, 0.0, 0.0, 0.70, 5.0], # NIK Palsu/Bukan Batam -> Tidak
-        [1.0, 1.0, 0.40, 1.0, 1.0, 0.85, 0.0], # Nama Tidak Cocok -> Tidak
-        [1.0, 1.0, 1.0, 0.0, 1.0, 0.85, 0.0], # Domisili Gagal -> Tidak
-        [1.0, 1.0, 1.0, 1.0, 0.0, 0.80, 0.0], # Kampus Tidak Diterima -> Tidak
-        [1.0, 1.0, 1.0, 1.0, 1.0, 0.60, 8.0], # Nilai Rapor Terlalu Rendah & Beda -> Tidak
-        [1.0, 1.0, 0.92, 1.0, 1.0, 0.87, 0.0], # Kasus Maya Lestari (Hinterland) -> Lolos
-        [1.0, 1.0, 1.0, 1.0, 1.0, 0.89, 0.0],  # Kasus Bryan Sitorus (SNBP) -> Lolos
-    ])
+    np.random.seed(42)
+    rows = []
+    labels = []
+
+    # 1. KELOMPOK LOLOS PRIMA (Sangat Layak: NIK Valid, Aktif, Nama Cocok, Domisili Valid, Diterima, Nilai Tinggi 80-98, Selisih 0-0.3)
+    for _ in range(40):
+        nik = 1.0
+        aktif = 1.0
+        nama_sim = round(float(np.random.uniform(0.92, 1.0)), 3)
+        domisili = 1.0
+        kampus = 1.0
+        nilai = round(float(np.random.uniform(0.82, 0.98)), 3)
+        selisih = round(float(np.random.uniform(0.0, 0.2)), 2)
+        rows.append([nik, aktif, nama_sim, domisili, kampus, nilai, selisih])
+        labels.append(1)
+
+    # 2. KELOMPOK LOLOS BORDERLINE / AFIRMASI (Hinterland / Prestasi Sedang: Nilai 75-84, sedikit typo nama tapi >0.85, selisih s/d 0.5)
+    for _ in range(30):
+        nik = 1.0
+        aktif = 1.0
+        nama_sim = round(float(np.random.uniform(0.85, 0.95)), 3)
+        domisili = 1.0
+        kampus = 1.0
+        nilai = round(float(np.random.uniform(0.75, 0.84)), 3)
+        selisih = round(float(np.random.uniform(0.0, 0.5)), 2)
+        rows.append([nik, aktif, nama_sim, domisili, kampus, nilai, selisih])
+        labels.append(1)
+
+    # 3. KELOMPOK GAGAL DUKCAPIL (NIK Bodong, NIK Nonaktif, Nama Berbeda Jauh)
+    for _ in range(25):
+        nik = float(np.random.choice([0.0, 1.0], p=[0.6, 0.4]))
+        aktif = 0.0 if nik == 1.0 else 0.0
+        nama_sim = round(float(np.random.uniform(0.1, 0.55)), 3)
+        domisili = float(np.random.choice([0.0, 0.5], p=[0.7, 0.3]))
+        kampus = float(np.random.choice([0.0, 1.0]))
+        nilai = round(float(np.random.uniform(0.60, 0.90)), 3)
+        selisih = round(float(np.random.uniform(0.0, 3.0)), 2)
+        rows.append([nik, aktif, nama_sim, domisili, kampus, nilai, selisih])
+        labels.append(0)
+
+    # 4. KELOMPOK GAGAL DOMISILI (Bukan KTP Batam / Syarat Hinterland tapi di Mainland)
+    for _ in range(15):
+        nik = 1.0
+        aktif = 1.0
+        nama_sim = round(float(np.random.uniform(0.85, 1.0)), 3)
+        domisili = 0.0  # Gagal domisili
+        kampus = 1.0
+        nilai = round(float(np.random.uniform(0.80, 0.95)), 3)
+        selisih = round(float(np.random.uniform(0.0, 0.5)), 2)
+        rows.append([nik, aktif, nama_sim, domisili, kampus, nilai, selisih])
+        labels.append(0)
+
+    # 5. KELOMPOK GAGAL AKADEMIK (Tidak Diterima Kampus / Drop out)
+    for _ in range(15):
+        nik = 1.0
+        aktif = 1.0
+        nama_sim = round(float(np.random.uniform(0.85, 1.0)), 3)
+        domisili = 1.0
+        kampus = 0.0  # Status kelulusan TIDAK DITERIMA
+        nilai = round(float(np.random.uniform(0.70, 0.88)), 3)
+        selisih = round(float(np.random.uniform(0.0, 1.0)), 2)
+        rows.append([nik, aktif, nama_sim, domisili, kampus, nilai, selisih])
+        labels.append(0)
+
+    # 6. KELOMPOK GAGAL NILAI (Nilai di bawah standar <0.70 ATAU Manipulasi Nilai selisih > 2.0 poin)
+    for _ in range(20):
+        nik = 1.0
+        aktif = 1.0
+        nama_sim = round(float(np.random.uniform(0.85, 1.0)), 3)
+        domisili = 1.0
+        kampus = 1.0
+        # Kasus A: Nilai rendah
+        # Kasus B: Manipulasi nilai (selisih 2 - 8 poin)
+        is_manipulasi = np.random.choice([True, False])
+        if is_manipulasi:
+            nilai = round(float(np.random.uniform(0.80, 0.95)), 3)
+            selisih = round(float(np.random.uniform(2.5, 9.0)), 2)
+        else:
+            nilai = round(float(np.random.uniform(0.40, 0.65)), 3)
+            selisih = round(float(np.random.uniform(0.0, 1.0)), 2)
+        rows.append([nik, aktif, nama_sim, domisili, kampus, nilai, selisih])
+        labels.append(0)
+
+    X_train = np.array(rows)
+    y_train = np.array(labels)
     
-    y_train = np.array([1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1])
+    return X_train, y_train
+
+
+def load_or_train_model():
+    """
+    Muat model dari cache jika tersedia dan versi cocok.
+    Jika belum ada atau versi berbeda, latih ulang dan simpan ke cache.
+    """
+    # Cek apakah model cache sudah ada dan versi cocok
+    if os.path.exists(MODEL_CACHE_PATH):
+        try:
+            with open(MODEL_CACHE_PATH, 'rb') as f:
+                cached = pickle.load(f)
+            
+            if isinstance(cached, dict) and cached.get('version') == MODEL_VERSION:
+                return cached['model']
+        except Exception:
+            pass  # Cache corrupt, akan di-train ulang
     
+    # Train model baru
+    X_train, y_train = get_training_data()
     model = RandomForestClassifier(n_estimators=35, random_state=42, max_depth=5)
     model.fit(X_train, y_train)
+    
+    # Simpan ke cache
+    os.makedirs(MODEL_CACHE_DIR, exist_ok=True)
+    try:
+        with open(MODEL_CACHE_PATH, 'wb') as f:
+            pickle.dump({
+                'version': MODEL_VERSION,
+                'model': model,
+            }, f)
+    except Exception:
+        pass  # Gagal cache tidak fatal, model tetap bisa dipakai
+    
     return model
 
 def calculate_name_similarity(name1, name2):
@@ -112,8 +218,8 @@ def run_xai_analysis(payload):
         selisih_nilai
     ]])
     
-    # 2. Prediksi Machine Learning
-    model = train_baseline_model()
+    # 2. Prediksi Machine Learning (CACHED MODEL)
+    model = load_or_train_model()
     prediction_proba = model.predict_proba(feature_vector)[0]
     
     # Probabilitas kelas 1 (Lolos)
@@ -182,6 +288,8 @@ def run_xai_analysis(payload):
         "model_metadata": {
             "algorithm": "RandomForestClassifier",
             "n_estimators": 35,
+            "model_cached": os.path.exists(MODEL_CACHE_PATH),
+            "cache_version": MODEL_VERSION,
             "explainability_method": "Global Gini Importance & Normalized Feature Attribution"
         }
     }

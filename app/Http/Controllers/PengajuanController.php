@@ -139,8 +139,8 @@ class PengajuanController extends Controller
 
         $validated = $request->validate($rules);
 
-        // Upload folder
-        $destinationPath = public_path('uploads/pengajuan');
+        // Upload ke storage (bukan public) — akses via route terproteksi
+        $destinationPath = storage_path('app/pengajuan');
         if (!file_exists($destinationPath)) {
             mkdir($destinationPath, 0755, true);
         }
@@ -150,7 +150,7 @@ class PengajuanController extends Controller
             $ktpFile = $request->file('file_ktp');
             $ktpFileName = 'ktp_' . time() . '_' . Str::random(6) . '.' . $ktpFile->getClientOriginalExtension();
             $ktpFile->move($destinationPath, $ktpFileName);
-            $fileKtpPath = 'uploads/pengajuan/' . $ktpFileName;
+            $fileKtpPath = 'pengajuan/' . $ktpFileName;
         }
 
         $fileRaportPath = null;
@@ -158,7 +158,7 @@ class PengajuanController extends Controller
             $raportFile = $request->file('file_raport');
             $raportFileName = 'raport_' . time() . '_' . Str::random(6) . '.' . $raportFile->getClientOriginalExtension();
             $raportFile->move($destinationPath, $raportFileName);
-            $fileRaportPath = 'uploads/pengajuan/' . $raportFileName;
+            $fileRaportPath = 'pengajuan/' . $raportFileName;
         }
 
         $fileUtbkPath = null;
@@ -166,12 +166,24 @@ class PengajuanController extends Controller
             $utbkFile = $request->file('file_utbk');
             $utbkFileName = 'utbk_' . time() . '_' . Str::random(6) . '.' . $utbkFile->getClientOriginalExtension();
             $utbkFile->move($destinationPath, $utbkFileName);
-            $fileUtbkPath = 'uploads/pengajuan/' . $utbkFileName;
+            $fileUtbkPath = 'pengajuan/' . $utbkFileName;
         }
 
-        // Generate No. Registrasi Unik
+        // Generate No. Registrasi Unik (Sequential — anti race condition)
         $prefix = strtoupper($jalurKey);
-        $nomorRegistrasi = 'BTM-' . $prefix . '-' . date('Y') . '-' . str_pad(mt_rand(1, 9999), 4, '0', STR_PAD_LEFT);
+        $tahun = date('Y');
+        $pattern = "BTM-{$prefix}-{$tahun}-";
+        $lastRegistrasi = Pengajuan::where('nomor_registrasi', 'LIKE', $pattern . '%')
+            ->orderByDesc('id')
+            ->value('nomor_registrasi');
+
+        $lastNumber = 0;
+        if ($lastRegistrasi) {
+            // Ambil 4 digit terakhir dari format "BTM-SNBP-2026-0012"
+            $parts = explode('-', $lastRegistrasi);
+            $lastNumber = (int) end($parts);
+        }
+        $nomorRegistrasi = $pattern . str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
 
         // Parse OCR Data jika dikirim dari frontend Tesseract
         $parsedOcrData = null;
@@ -280,7 +292,7 @@ class PengajuanController extends Controller
 
         $validated = $request->validate($rules);
 
-        $destinationPath = public_path('uploads/pengajuan');
+        $destinationPath = storage_path('app/pengajuan');
         if (!file_exists($destinationPath)) {
             mkdir($destinationPath, 0755, true);
         }
@@ -289,21 +301,21 @@ class PengajuanController extends Controller
             $ktpFile = $request->file('file_ktp');
             $ktpFileName = 'ktp_' . time() . '_' . Str::random(6) . '.' . $ktpFile->getClientOriginalExtension();
             $ktpFile->move($destinationPath, $ktpFileName);
-            $validated['file_ktp'] = 'uploads/pengajuan/' . $ktpFileName;
+            $validated['file_ktp'] = 'pengajuan/' . $ktpFileName;
         }
 
         if ($request->hasFile('file_raport')) {
             $raportFile = $request->file('file_raport');
             $raportFileName = 'raport_' . time() . '_' . Str::random(6) . '.' . $raportFile->getClientOriginalExtension();
             $raportFile->move($destinationPath, $raportFileName);
-            $validated['file_raport'] = 'uploads/pengajuan/' . $raportFileName;
+            $validated['file_raport'] = 'pengajuan/' . $raportFileName;
         }
 
         if ($request->hasFile('file_utbk')) {
             $utbkFile = $request->file('file_utbk');
             $utbkFileName = 'utbk_' . time() . '_' . Str::random(6) . '.' . $utbkFile->getClientOriginalExtension();
             $utbkFile->move($destinationPath, $utbkFileName);
-            $validated['file_utbk'] = 'uploads/pengajuan/' . $utbkFileName;
+            $validated['file_utbk'] = 'pengajuan/' . $utbkFileName;
         }
 
         $validated['status'] = 'menunggu_verifikasi';

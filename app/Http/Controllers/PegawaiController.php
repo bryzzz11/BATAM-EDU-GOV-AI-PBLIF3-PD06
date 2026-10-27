@@ -8,6 +8,7 @@ use App\Models\Pengajuan;
 use App\Services\XAIService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\Process\Process;
 
 class PegawaiController extends Controller
 {
@@ -250,13 +251,16 @@ class PegawaiController extends Controller
 
         $targetType = $request->tipe_data;
         $scriptPath = base_path('ai/excel_parser.py');
-        $command = "python \"{$scriptPath}\" --file \"{$tempPath}\" --type \"{$targetType}\"";
 
-        $output = shell_exec($command);
+        $process = new Process(['python', $scriptPath, '--file', $tempPath, '--type', $targetType]);
+        $process->setTimeout(60);
+        $process->run();
 
         if (file_exists($tempPath)) {
             @unlink($tempPath);
         }
+
+        $output = $process->isSuccessful() ? $process->getOutput() : null;
 
         if (!$output) {
             return redirect()->back()->with('error', 'Gagal memproses berkas Excel. Pastikan format tabel sesuai kolom.');
@@ -309,8 +313,31 @@ class PegawaiController extends Controller
         }
 
         $label = $targetType === 'dukcapil' ? 'Disdukcapil Kota Batam' : 'Pangkalan Akademik Kemdikbud';
+
+        // ─── BATCH RE-ANALYZE xAI ────────────────────────────────────────────
+        // Setelah data eksternal berubah, perbarui semua analisis xAI
+        // untuk pengajuan yang masih aktif (belum final) agar tidak stale.
+        $stalePengajuans = Pengajuan::whereIn('status', [
+            'menunggu_verifikasi',
+            'perlu_perbaikan',
+            'menunggu_keputusan',
+        ])->get();
+
+        $reanalyzed = 0;
+        foreach ($stalePengajuans as $p) {
+            try {
+                $p->xai_data = XAIService::analyze($p);
+                $p->save();
+                $reanalyzed++;
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::warning("Re-analyze xAI gagal untuk #{$p->id}: " . $e->getMessage());
+            }
+        }
+
+        $extraInfo = $reanalyzed > 0 ? " Analisis xAI diperbarui untuk {$reanalyzed} pengajuan aktif." : '';
+
         return redirect()->route('pegawai.data-eksternal', ['tab' => $targetType])
-            ->with('success', "Berhasil memproses {$decoded['total_records']} baris data {$label} ({$inserted} baru ditambahkan, {$updated} diperbarui)!");
+            ->with('success', "Berhasil memproses {$decoded['total_records']} baris data {$label} ({$inserted} baru ditambahkan, {$updated} diperbarui).{$extraInfo}");
     }
 
     /**

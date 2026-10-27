@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\DataAkademik;
 use App\Models\DataDukcapil;
 use App\Models\Pengajuan;
+use Symfony\Component\Process\Process;
 
 class XAIService
 {
@@ -353,13 +354,16 @@ class XAIService
             file_put_contents($tempFile, json_encode($payload));
 
             $scriptPath = base_path('ai/xai_engine.py');
-            $command = "python \"{$scriptPath}\" --file \"{$tempFile}\"";
 
-            $output = shell_exec($command);
+            $process = new Process(['python', $scriptPath, '--file', $tempFile]);
+            $process->setTimeout(30);
+            $process->run();
 
             if (file_exists($tempFile)) {
                 @unlink($tempFile);
             }
+
+            $output = $process->isSuccessful() ? $process->getOutput() : null;
 
             if ($output) {
                 $decoded = json_decode(trim($output), true);

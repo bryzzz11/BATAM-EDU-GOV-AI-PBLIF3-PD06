@@ -177,7 +177,7 @@
                     <div class="p-4 bg-gray-50 rounded-2xl border border-gray-200 space-y-2">
                         <label class="block text-xs font-bold text-gray-800">Unggah Ulang e-KTP Kota Batam</label>
                         @if($pengajuan->file_ktp)
-                            <p class="text-[11px] text-gray-500">File saat ini: <a href="{{ asset($pengajuan->file_ktp) }}" target="_blank" class="text-emerald-700 font-bold underline">Lihat KTP Lama</a></p>
+                            <p class="text-[11px] text-gray-500">File saat ini: <a href="{{ route('file.serve', ['path' => $pengajuan->file_ktp]) }}" target="_blank" class="text-emerald-700 font-bold underline">Lihat KTP Lama</a></p>
                         @endif
                         <input type="file" name="file_ktp" accept=".pdf,.jpg,.jpeg,.png" class="block w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-gray-800 file:text-white hover:file:bg-black cursor-pointer">
                     </div>
@@ -186,7 +186,7 @@
                     <div class="p-4 bg-gray-50 rounded-2xl border border-gray-200 space-y-2">
                         <label class="block text-xs font-bold text-gray-800">Unggah Ulang Rapor SMA / Transkrip</label>
                         @if($pengajuan->file_raport)
-                            <p class="text-[11px] text-gray-500">File saat ini: <a href="{{ asset($pengajuan->file_raport) }}" target="_blank" class="text-emerald-700 font-bold underline">Lihat Rapor Lama</a></p>
+                            <p class="text-[11px] text-gray-500">File saat ini: <a href="{{ route('file.serve', ['path' => $pengajuan->file_raport]) }}" target="_blank" class="text-emerald-700 font-bold underline">Lihat Rapor Lama</a></p>
                         @endif
                         <input type="file" name="file_raport" accept=".pdf,.jpg,.jpeg,.png" class="block w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-gray-800 file:text-white hover:file:bg-black cursor-pointer">
                     </div>
